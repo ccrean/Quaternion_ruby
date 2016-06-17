@@ -98,8 +98,7 @@ class TestQuaternion < Test::Unit::TestCase
     angles = [ [0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1], [0, -Math::PI/2, 0] ]
 
     for roll, pitch, yaw in angles
-      q = ::Quaternion.new
-      q.setRollPitchYawXYZ(roll, pitch, yaw)
+      q = ::Quaternion.fromRollPitchYawXYZ(roll, pitch, yaw)
       
       r, p, y = q.getRollPitchYawXYZ()
 
