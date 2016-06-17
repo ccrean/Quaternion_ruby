@@ -19,7 +19,7 @@ class Quaternion
     return Vector[@beta0, @beta1, @beta2, @beta3]
   end
 
-  def setAngleAxis(axis, angle)
+  def setAngleAxis(angle, axis)
     axis = axis.normalize()
     @beta0 = Math.cos(angle / 2.0)
     @beta1 = axis[0] * Math.sin(angle / 2.0)
