@@ -44,11 +44,16 @@ class Quaternion
     return angle, axis
   end
 
-  def setRollPitchYaw(roll, pitch, yaw)
+  def setRollPitchYawXYZ(roll, pitch, yaw)
     # sets the quaternion from the roll, pitch, and yaw angles
+    q_roll = Quaternion.fromAngleAxis(roll, Vector[1,0,0])
+    q_pitch = Quaternion.fromAngleAxis(pitch, Vector[0,1,0])
+    q_yaw = Quaternion.fromAngleAxis(yaw, Vector[0,0,1])
+    result = q_roll * q_pitch * q_yaw
+    @beta0, @beta_s = result.get()
   end
 
-  def getRollPitchYaw
+  def getRollPitchYawXYZ
     # returns the roll, pitch, and yaw angles corresponding to this
     # quaternion
   end
