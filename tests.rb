@@ -36,4 +36,21 @@ class TestQuaternion < Test::Unit::TestCase
     assert_in_delta(angle, result_angle, 1e-15)
   end
 
+  def test_multiply_inverse
+    q1 = ::Quaternion.new
+    axis1 = Vector[1, 2, 3]
+    angle1 = 1.123
+    q1.setAngleAxis(angle1, axis1)
+
+    q2 = ::Quaternion.new
+    axis2 = Vector[1, 2, 3]
+    angle2 = -1.123
+    q2.setAngleAxis(angle2, axis2)
+
+    q3 = q1 * q2
+    beta0, beta_s = q3.get()
+    assert_in_delta(1, beta0, 1e-15)
+    assert_in_delta(0, beta_s.norm(), 1e-15)
+  end
+
 end
