@@ -5,22 +5,18 @@ class Quaternion
   def initialize
     # initializes a quaternion from the vaules of the Euler parameters
     @beta0 = 1
-    @beta1 = 0
-    @beta2 = 0
-    @beta3 = 0
+    @beta_s = Vector[0, 0, 0]
   end
 
   def set(beta1, beta2, beta3)
     # sets Euler parameters
     @beta0 = Math.sqrt(1 - (beta1**2 + beta2**2 + beta3**2))
-    @beta1 = beta1
-    @beta2 = beta2
-    @beta3 = beta3
+    @beta_s = Vector[beta1, beta2, beta3]
   end
 
   def get
     # returns Euler parameters
-    return @beta0, Vector[@beta1, @beta2, @beta3]
+    return @beta0, @beta_s
   end
 
   def setAngleAxis(angle, axis)
@@ -28,20 +24,18 @@ class Quaternion
     # rotation
     axis = axis.normalize()
     @beta0 = Math.cos(angle / 2.0)
-    @beta1 = axis[0] * Math.sin(angle / 2.0)
-    @beta2 = axis[1] * Math.sin(angle / 2.0)
-    @beta3 = axis[2] * Math.sin(angle / 2.0)
+    beta1 = axis[0] * Math.sin(angle / 2.0)
+    beta2 = axis[1] * Math.sin(angle / 2.0)
+    beta3 = axis[2] * Math.sin(angle / 2.0)
+    @beta_s = Vector[beta1, beta2, beta3]
   end
 
   def getAngleAxis
     # return the angle-axis representation of the rotation contained in
     # this quaternion
     angle = 2*Math.acos(@beta0)
-    axis = [0,0,0]
-    axis[0] = @beta1 / Math.sin(angle/2)
-    axis[1] = @beta2 / Math.sin(angle/2)
-    axis[2] = @beta3 / Math.sin(angle/2)
-    return angle, Vector.elements(axis)
+    axis = @beta_s / Math.sin(angle/2)
+    return angle, axis
   end
 
   def setRollPitchYaw(roll, pitch, yaw)
