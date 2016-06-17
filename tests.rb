@@ -15,4 +15,16 @@ class TestQuaternion < Test::Unit::TestCase
     assert_equal(1, q_ret[0]**2 + q_ret[1]**2 + q_ret[2]**2 + q_ret[3]**2)
   end
 
+  def test_setAngleAxis
+    q = ::Quaternion.new
+    axis = Vector[1, 0, 0]
+    angle = Math::PI/2
+    q.setAngleAxis(angle, axis)
+    result = q.get()
+    assert_equal(Math.cos(angle/2.0), result[0])
+    assert_equal(axis[0]*Math.sin(angle/2.0), result[1])
+    assert_equal(axis[1]*Math.sin(angle/2.0), result[2])
+    assert_equal(axis[2]*Math.sin(angle/2.0), result[3])
+  end
+
 end
