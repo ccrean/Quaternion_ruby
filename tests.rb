@@ -11,6 +11,10 @@ class TestQuaternion < Test::Unit::TestCase
     assert_equal(0.9848857801796105, beta0)
     assert_equal(Vector[0.1, 0.1, 0.1], beta_s)
     assert_equal(1, beta0**2 + beta_s.norm()**2)
+
+    assert_raise(ArgumentError) do
+      q.set(1,1,1)
+    end
   end
 
   def test_setAngleAxis

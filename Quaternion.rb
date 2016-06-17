@@ -26,6 +26,10 @@ class Quaternion
 
   def set(beta1, beta2, beta3)
     # sets Euler parameters
+    if (beta1**2 + beta2**2 + beta3**2) > 1
+      raise(ArgumentError, "The sum of the squares of the arguments must " +
+            "be less than or equal to 1")
+    end
     @beta0 = Math.sqrt(1 - (beta1**2 + beta2**2 + beta3**2))
     @beta_s = Vector[beta1, beta2, beta3]
   end
