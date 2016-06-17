@@ -53,4 +53,26 @@ class TestQuaternion < Test::Unit::TestCase
     assert_in_delta(0, beta_s.norm(), 1e-15)
   end
 
+  def test_multiply
+    q1 = ::Quaternion.new
+    axis1 = Vector[3, 1, 6]
+    angle1 = 1.32
+    q1.setAngleAxis(angle1, axis1)
+
+    q2 = ::Quaternion.new
+    axis2 = Vector[1, 1, 1]
+    angle2 = Math::PI/4
+    q2.setAngleAxis(angle2, axis2)
+
+    q_result = q2*q1
+    q_result_mat = q_result.getRotationMatrix()
+    
+    mat_result = q2.getRotationMatrix() * q1.getRotationMatrix()
+    
+    for i in 0..2
+      assert_operator((q_result_mat.row(i) - mat_result.row(i)).norm(),
+                      :<, 1e-15)
+    end
+  end
+
 end
