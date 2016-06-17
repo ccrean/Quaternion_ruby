@@ -83,7 +83,7 @@ class Quaternion
   end
 
   def print
-    puts "(#{@beta0}, #{@beta1}, #{@beta2}, #{@beta3})"
+    puts "(#{@beta0}, #{@beta_s})"
   end
 
   private
