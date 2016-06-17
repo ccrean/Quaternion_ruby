@@ -94,4 +94,19 @@ class TestQuaternion < Test::Unit::TestCase
     assert_operator((q.get()[1] - q2.get()[1]).norm(), :<, 1e-15)
   end
 
+  def test_getRollPitchYawXYZ
+    angles = [ [0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1], [0, -Math::PI/2, 0] ]
+
+    for roll, pitch, yaw in angles
+      q = ::Quaternion.new
+      q.setRollPitchYawXYZ(roll, pitch, yaw)
+      
+      r, p, y = q.getRollPitchYawXYZ()
+
+      assert_in_delta(roll, r, 1e-15)
+      assert_in_delta(pitch, p, 1e-15)
+      assert_in_delta(yaw, y, 1e-15)
+    end
+  end
+
 end

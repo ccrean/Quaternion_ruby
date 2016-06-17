@@ -56,6 +56,12 @@ class Quaternion
   def getRollPitchYawXYZ
     # returns the roll, pitch, and yaw angles corresponding to this
     # quaternion
+    roll = Math.atan2(2*(@beta0*@beta_s[0] + @beta_s[1]*@beta_s[2]),
+                      1 - 2*(@beta_s[0]**2 + @beta_s[1]**2))
+    pitch = Math.asin(2*(@beta0*@beta_s[1] - @beta_s[2]*@beta_s[0]))
+    yaw = Math.atan2(2*(@beta0*@beta_s[2] + @beta_s[0]*@beta_s[1]),
+                     1 - 2*(@beta_s[1]**2 + @beta_s[2]**2))
+    return roll, pitch, yaw
   end
 
   def getRotationMatrix
