@@ -1,3 +1,5 @@
+require 'matrix'
+
 class Quaternion
   def initialize
     @beta0 = 1
@@ -7,10 +9,14 @@ class Quaternion
   end
 
   def set(beta1, beta2, beta3)
-    @beta0 = Math.sqrt(1 - beta1**2 + beta2**2 + beta3**2)
+    @beta0 = Math.sqrt(1 - (beta1**2 + beta2**2 + beta3**2))
     @beta1 = beta1
     @beta2 = beta2
     @beta3 = beta3
+  end
+
+  def get
+    return Vector[@beta0, @beta1, @beta2, @beta3]
   end
 
   def setAngleAxis(axis, angle)
