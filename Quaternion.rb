@@ -16,7 +16,7 @@ class Quaternion
   end
 
   def get
-    return Vector[@beta0, @beta1, @beta2, @beta3]
+    return @beta0, Vector[@beta1, @beta2, @beta3]
   end
 
   def setAngleAxis(angle, axis)
