@@ -98,9 +98,16 @@ class Quaternion
   end
 
   def transform(vec)
-    # transforms vec by applying the rotation represented by this quaternion,
-    # and returns the result
+    # transforms vec by applying the rotation represented by this
+    # quaternion, and returns the result
     return getRotationMatrix() * vec
+  end
+
+  def inverse
+    # returns the inverse of the quaternion
+    result = Quaternion.new
+    result.set(*(-1*@beta_s))
+    return result
   end
 
   def *(q)

@@ -127,4 +127,37 @@ class TestQuaternion < Test::Unit::TestCase
     end
   end
 
+  def test_inverse
+    def isIdentityMatrix(m, tol)
+      for i, j in [0,1,2].product([0,1,2])
+        if i == j
+          if (m[i,j] - 1).abs > tol
+            return false
+          end
+        else
+          if m[i,j].abs > tol
+            return false
+          end
+        end
+      end
+      return true
+    end
+    
+    angles = [ 0, Math::PI/4, 0.1234, Math::PI/2, 2 ]
+    axes = [ Vector[1,1,1], Vector[1,2,3], Vector[0,0,1] ]
+    for angle, axis in angles.product(axes)
+      q = ::Quaternion.fromAngleAxis(angle, axis)
+      q_inv = q.inverse()
+
+      assert(isIdentityMatrix( q.getRotationMatrix() *
+                               q_inv.getRotationMatrix(),
+                               1e-15 )
+             )
+
+      result = q * q_inv
+      beta0, beta_s = result.get()
+      assert_in_delta(beta0, 1, 1e-15)
+      assert_operator((beta_s - Vector[0,0,0]).norm(), :<, 1e-15)
+    end
+  end
 end
