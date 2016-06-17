@@ -38,6 +38,12 @@ class Quaternion
   def setAngleAxis(angle, axis)
     # sets the quaternion based on the angle-axis representation of a
     # rotation
+    if axis == Vector[0,0,0]
+      raise(ArgumentError, "Axis must not be the zero vector")
+    end
+    if axis.size() != 3
+      raise(ArgumentError, "Axis must be a 3-dimensional vector")
+    end
     axis = axis.normalize()
     @beta0 = Math.cos(angle / 2.0)
     beta1 = axis[0] * Math.sin(angle / 2.0)

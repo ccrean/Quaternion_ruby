@@ -16,12 +16,27 @@ class TestQuaternion < Test::Unit::TestCase
   def test_setAngleAxis
     axis = Vector[1, 0, 0]
     angle = Math::PI/2
-    q = ::Quaternion.fromAngleAxis(angle, axis)
+    q = ::Quaternion.new
+    q.setAngleAxis(angle, axis)
     beta0, beta_s = q.get()
     assert_equal(Math.cos(angle/2.0), beta0)
     assert_equal(axis[0]*Math.sin(angle/2.0), beta_s[0])
     assert_equal(axis[1]*Math.sin(angle/2.0), beta_s[1])
     assert_equal(axis[2]*Math.sin(angle/2.0), beta_s[2])
+
+    q2 = ::Quaternion.new
+    assert_raise(ArgumentError) do
+      q2.setAngleAxis(0, Vector[0,0,0])
+    end
+    assert_raise(ArgumentError) do
+      q2.setAngleAxis(0, Vector[1,1,1,1])
+    end
+    assert_raise(ArgumentError) do
+      q2 = ::Quaternion.fromAngleAxis(0, Vector[0,0,0])
+    end
+    assert_raise(ArgumentError) do
+      q2 = ::Quaternion.fromAngleAxis(0, Vector[1,1,1,1])
+    end
   end
 
   def test_getAngleAxis
