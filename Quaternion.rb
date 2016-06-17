@@ -27,6 +27,15 @@ class Quaternion
     @beta3 = axis[2] * Math.sin(angle / 2.0)
   end
 
+  def getAngleAxis
+    angle = 2*Math.acos(@beta0)
+    axis = [0,0,0]
+    axis[0] = @beta1 / Math.sin(angle/2)
+    axis[1] = @beta2 / Math.sin(angle/2)
+    axis[2] = @beta3 / Math.sin(angle/2)
+    return angle, Vector.elements(axis)
+  end
+
   def print
     puts "(#{@beta0}, #{@beta1}, #{@beta2}, #{@beta3})"
   end
