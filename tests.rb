@@ -14,10 +14,9 @@ class TestQuaternion < Test::Unit::TestCase
   end
 
   def test_setAngleAxis
-    q = ::Quaternion.new
     axis = Vector[1, 0, 0]
     angle = Math::PI/2
-    q.setAngleAxis(angle, axis)
+    q = ::Quaternion.fromAngleAxis(angle, axis)
     beta0, beta_s = q.get()
     assert_equal(Math.cos(angle/2.0), beta0)
     assert_equal(axis[0]*Math.sin(angle/2.0), beta_s[0])
@@ -26,10 +25,9 @@ class TestQuaternion < Test::Unit::TestCase
   end
 
   def test_getAngleAxis
-    q = ::Quaternion.new
     axis = Vector[1, 2, 3]
     angle = 0.4321
-    q.setAngleAxis(angle, axis)
+    q = ::Quaternion.fromAngleAxis(angle, axis)
     result_angle, result_axis = q.getAngleAxis()
 
     assert_operator((axis.normalize() - result_axis).norm(), :<, 1e-15)
@@ -37,15 +35,13 @@ class TestQuaternion < Test::Unit::TestCase
   end
 
   def test_multiply_inverse
-    q1 = ::Quaternion.new
     axis1 = Vector[1, 2, 3]
     angle1 = 1.123
-    q1.setAngleAxis(angle1, axis1)
+    q1 = ::Quaternion.fromAngleAxis(angle1, axis1)
 
-    q2 = ::Quaternion.new
     axis2 = Vector[1, 2, 3]
     angle2 = -1.123
-    q2.setAngleAxis(angle2, axis2)
+    q2 = ::Quaternion.fromAngleAxis(angle2, axis2)
 
     q3 = q1 * q2
     beta0, beta_s = q3.get()
@@ -54,15 +50,13 @@ class TestQuaternion < Test::Unit::TestCase
   end
 
   def test_multiply
-    q1 = ::Quaternion.new
     axis1 = Vector[3, 1, 6]
     angle1 = 1.32
-    q1.setAngleAxis(angle1, axis1)
+    q1 = ::Quaternion.fromAngleAxis(angle1, axis1)
 
-    q2 = ::Quaternion.new
     axis2 = Vector[1, 1, 1]
     angle2 = Math::PI/4
-    q2.setAngleAxis(angle2, axis2)
+    q2 = ::Quaternion.fromAngleAxis(angle2, axis2)
 
     q_result = q2*q1
     q_result_mat = q_result.getRotationMatrix()
@@ -76,10 +70,9 @@ class TestQuaternion < Test::Unit::TestCase
   end
 
   def test_transform
-    q1 = ::Quaternion.new
     axis = Vector[1,1,1]
     angle = 2*Math::PI/3
-    q1.setAngleAxis(angle, axis)
+    q1 = ::Quaternion.fromAngleAxis(angle, axis)
 
     v = Vector[1,0,0]
     v_rot = q1.transform(v)

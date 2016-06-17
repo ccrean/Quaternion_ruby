@@ -8,6 +8,12 @@ class Quaternion
     @beta_s = Vector[0, 0, 0]
   end
 
+  def self.fromAngleAxis(angle, axis)
+    q = Quaternion.new
+    q.setAngleAxis(angle, axis)
+    return q
+  end
+
   def set(beta1, beta2, beta3)
     # sets Euler parameters
     @beta0 = Math.sqrt(1 - (beta1**2 + beta2**2 + beta3**2))
