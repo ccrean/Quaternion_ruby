@@ -9,12 +9,16 @@ class Quaternion
   end
 
   def self.fromAngleAxis(angle, axis)
+    # intializes a quaternion from the angle-axis representation of a
+    # rotation
     q = Quaternion.new
     q.setAngleAxis(angle, axis)
     return q
   end
 
   def self.fromRollPitchYawXYZ(roll, pitch, yaw)
+    # initializes a quaternion from roll, pitch, and yaw angles (about the
+    # x, y, and z axes, respectively)
     q = Quaternion.new
     q.setRollPitchYawXYZ(roll, pitch, yaw)
     return q
