@@ -63,6 +63,7 @@ class Quaternion
   def transform(vec)
     # transforms vec by applying the rotation represented by this quaternion,
     # and returns the result
+    return getRotationMatrix() * vec
   end
 
   def *(q)

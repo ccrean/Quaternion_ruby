@@ -75,4 +75,17 @@ class TestQuaternion < Test::Unit::TestCase
     end
   end
 
+  def test_transform
+    q1 = ::Quaternion.new
+    axis = Vector[1,1,1]
+    angle = 2*Math::PI/3
+    q1.setAngleAxis(angle, axis)
+
+    v = Vector[1,0,0]
+    v_rot = q1.transform(v)
+    expected = Vector[0,1,0]
+
+    assert_operator((v_rot - expected).norm(), :<, 1e-15)
+  end
+
 end
