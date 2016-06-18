@@ -196,6 +196,18 @@ class TestUnitQuaternion < Test::Unit::TestCase
 
     assert_in_delta(q.get()[0], q2.get()[0], 1e-15)
     assert_in_delta((q.get()[1] - q2.get()[1]).norm(), 0, 1e-15)
+
+    q = ::UnitQuaternion.fromRollPitchYawXYZ(Math::PI/2, 0, 0)
+    q2 = ::UnitQuaternion.fromAngleAxis(Math::PI/2, Vector[1, 0, 0])
+    assert_in_delta((q - q2).norm(), 0, 1e-15)
+
+    q = ::UnitQuaternion.fromRollPitchYawXYZ(0, Math::PI/2, 0)
+    q2 = ::UnitQuaternion.fromAngleAxis(Math::PI/2, Vector[0, 1, 0])
+    assert_in_delta((q - q2).norm(), 0, 1e-15)
+
+    q = ::UnitQuaternion.fromRollPitchYawXYZ(0, 0, Math::PI/2)
+    q2 = ::UnitQuaternion.fromAngleAxis(Math::PI/2, Vector[0, 0, 1])
+    assert_in_delta((q - q2).norm(), 0, 1e-15)
   end
 
   def test_getRollPitchYawXYZ
