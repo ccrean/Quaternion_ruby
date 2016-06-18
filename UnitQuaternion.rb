@@ -114,7 +114,7 @@ class UnitQuaternion < Quaternion
   def inverse
     # returns the inverse of the quaternion
     result = UnitQuaternion.new
-    result.set(*(-1*@beta_s))
+    result.set(@beta0, *(-1*@beta_s))
     return result
   end
 end

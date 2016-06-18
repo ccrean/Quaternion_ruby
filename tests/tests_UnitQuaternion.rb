@@ -4,6 +4,18 @@ require_relative '../UnitQuaternion'
 
 class TestUnitQuaternion < Test::Unit::TestCase
 
+  def setup
+    @quats = [ ::UnitQuaternion.new(1,2,3,4),
+               ::UnitQuaternion.new(0.1, 0.01, 2.3, 4),
+               ::UnitQuaternion.new(1234.4134, 689.6124, 134.124, 0.5),
+               ::UnitQuaternion.new(1,1,1,1),
+             ]
+    @angles = [ 2*Math::PI, Math::PI, Math::PI/2, Math::PI/4,
+                0.5,  0.25, 0.1234, ]
+    @axes = [ Vector[ 1, 1, 1 ], Vector[ 1, 0, 0 ], Vector[ 0, 1, 0 ],
+              Vector[ 0, 0, 1 ], Vector[ 1, 2, 3 ], ]
+  end
+
   def test_initialize
     q = ::UnitQuaternion.new(0.1, 0.1, 0.1)
     beta0, beta_s = q.get()
@@ -60,6 +72,15 @@ class TestUnitQuaternion < Test::Unit::TestCase
     assert_equal(axis[1]*Math.sin(angle/2.0), beta_s[1])
     assert_equal(axis[2]*Math.sin(angle/2.0), beta_s[2])
 
+    for angle, axis in @angles.product(@axes)
+      q = ::UnitQuaternion.new
+      q.setAngleAxis(angle, axis)
+      beta0, beta_s = q.get()
+      assert_in_delta(Math.cos(angle/2), beta0, 1e-15)
+      assert_in_delta((beta_s - axis.normalize()*Math.sin(angle/2)).norm(),
+                      0, 1e-15)
+    end
+
     q2 = ::UnitQuaternion.new
     assert_raise(ArgumentError) do
       q2.setAngleAxis(0, Vector[0,0,0])
@@ -83,6 +104,13 @@ class TestUnitQuaternion < Test::Unit::TestCase
 
     assert_operator((axis.normalize() - result_axis).norm(), :<, 1e-15)
     assert_in_delta(angle, result_angle, 1e-15)
+
+    for angle, axis in @angles.product(@axes)
+      q = ::UnitQuaternion.fromAngleAxis(angle, axis)
+      a, ax = q.getAngleAxis()
+      assert_in_delta(angle, a, 1e-14)
+      assert_in_delta((ax - axis.normalize()).norm(), 0, 1e-13)
+    end
   end
 
   def test_multiply_inverse
@@ -98,6 +126,14 @@ class TestUnitQuaternion < Test::Unit::TestCase
     beta0, beta_s = q3.get()
     assert_in_delta(1, beta0, 1e-15)
     assert_in_delta(0, beta_s.norm(), 1e-15)
+
+    for q in @quats
+      q_inv = q.inverse()
+      result = q * q_inv
+      beta0, beta_s = result.get()
+      assert_in_delta(1, beta0, 1e-15)
+      assert_in_delta(0, beta_s.norm(), 1e-14)
+    end
   end
 
   def test_multiply
@@ -118,6 +154,17 @@ class TestUnitQuaternion < Test::Unit::TestCase
       assert_operator((q_result_mat.row(i) - mat_result.row(i)).norm(),
                       :<, 1e-15)
     end
+
+    for q1, q2 in @quats.product(@quats)
+      q_result = q2 * q1
+      q_result_mat = q_result.getRotationMatrix()
+      mat_result = q2.getRotationMatrix() * q1.getRotationMatrix()
+
+      for i in 0..2
+        assert_in_delta((q_result_mat.row(i) - mat_result.row(i)).norm(),
+                        0, 1e-14)
+      end
+    end
   end
 
   def test_transform
@@ -130,6 +177,12 @@ class TestUnitQuaternion < Test::Unit::TestCase
     expected = Vector[0,1,0]
 
     assert_operator((v_rot - expected).norm(), :<, 1e-15)
+
+    for q, v in @quats.product(@axes)
+      v_rot = q.transform(v)
+      v_expected = q.getRotationMatrix() * v
+      assert_in_delta((v_rot - v_expected).norm(), 0, 1e-15)
+    end
   end
 
   def test_setRollPitchYawXYZ
@@ -177,7 +230,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     
     angles = [ 0, Math::PI/4, 0.1234, Math::PI/2, 2 ]
     axes = [ Vector[1,1,1], Vector[1,2,3], Vector[0,0,1] ]
-    for angle, axis in angles.product(axes)
+    for angle, axis in (angles + @angles).product(axes + @axes)
       q = ::UnitQuaternion.fromAngleAxis(angle, axis)
       q_inv = q.inverse()
 
