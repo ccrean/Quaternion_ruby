@@ -1,6 +1,6 @@
 require 'matrix'
 
-class Quaternion
+class UnitQuaternion
 
   def initialize
     # initializes a quaternion from the vaules of the Euler parameters
@@ -11,7 +11,7 @@ class Quaternion
   def self.fromAngleAxis(angle, axis)
     # intializes a quaternion from the angle-axis representation of a
     # rotation
-    q = Quaternion.new
+    q = UnitQuaternion.new
     q.setAngleAxis(angle, axis)
     return q
   end
@@ -19,7 +19,7 @@ class Quaternion
   def self.fromRollPitchYawXYZ(roll, pitch, yaw)
     # initializes a quaternion from roll, pitch, and yaw angles (about the
     # x, y, and z axes, respectively)
-    q = Quaternion.new
+    q = UnitQuaternion.new
     q.setRollPitchYawXYZ(roll, pitch, yaw)
     return q
   end
@@ -66,9 +66,9 @@ class Quaternion
 
   def setRollPitchYawXYZ(roll, pitch, yaw)
     # sets the quaternion from the roll, pitch, and yaw angles
-    q_roll = Quaternion.fromAngleAxis(roll, Vector[1,0,0])
-    q_pitch = Quaternion.fromAngleAxis(pitch, Vector[0,1,0])
-    q_yaw = Quaternion.fromAngleAxis(yaw, Vector[0,0,1])
+    q_roll = UnitQuaternion.fromAngleAxis(roll, Vector[1,0,0])
+    q_pitch = UnitQuaternion.fromAngleAxis(pitch, Vector[0,1,0])
+    q_yaw = UnitQuaternion.fromAngleAxis(yaw, Vector[0,0,1])
     result = q_roll * q_pitch * q_yaw
     @beta0, @beta_s = result.get()
   end
@@ -105,7 +105,7 @@ class Quaternion
 
   def inverse
     # returns the inverse of the quaternion
-    result = Quaternion.new
+    result = UnitQuaternion.new
     result.set(*(-1*@beta_s))
     return result
   end
@@ -116,7 +116,7 @@ class Quaternion
     beta0 = @beta0 * q_beta0 - @beta_s.inner_product(q_beta_s)
     beta_s =  @beta0 * q_beta_s + q_beta0 * @beta_s +
       cross_product(@beta_s, q_beta_s)
-    result = Quaternion.new
+    result = UnitQuaternion.new
     result.set(beta_s[0], beta_s[1], beta_s[2])
     return result
   end

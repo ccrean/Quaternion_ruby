@@ -1,11 +1,11 @@
 require 'test/unit'
 require 'matrix'
-require_relative 'Quaternion'
+require_relative 'UnitQuaternion'
 
-class TestQuaternion < Test::Unit::TestCase
+class TestUnitQuaternion < Test::Unit::TestCase
 
   def test_set
-    q = ::Quaternion.new
+    q = ::UnitQuaternion.new
     q.set(0.1, 0.1, 0.1)
     beta0, beta_s = q.get()
     assert_equal(0.9848857801796105, beta0)
@@ -20,7 +20,7 @@ class TestQuaternion < Test::Unit::TestCase
   def test_setAngleAxis
     axis = Vector[1, 0, 0]
     angle = Math::PI/2
-    q = ::Quaternion.new
+    q = ::UnitQuaternion.new
     q.setAngleAxis(angle, axis)
     beta0, beta_s = q.get()
     assert_equal(Math.cos(angle/2.0), beta0)
@@ -28,7 +28,7 @@ class TestQuaternion < Test::Unit::TestCase
     assert_equal(axis[1]*Math.sin(angle/2.0), beta_s[1])
     assert_equal(axis[2]*Math.sin(angle/2.0), beta_s[2])
 
-    q2 = ::Quaternion.new
+    q2 = ::UnitQuaternion.new
     assert_raise(ArgumentError) do
       q2.setAngleAxis(0, Vector[0,0,0])
     end
@@ -36,17 +36,17 @@ class TestQuaternion < Test::Unit::TestCase
       q2.setAngleAxis(0, Vector[1,1,1,1])
     end
     assert_raise(ArgumentError) do
-      q2 = ::Quaternion.fromAngleAxis(0, Vector[0,0,0])
+      q2 = ::UnitQuaternion.fromAngleAxis(0, Vector[0,0,0])
     end
     assert_raise(ArgumentError) do
-      q2 = ::Quaternion.fromAngleAxis(0, Vector[1,1,1,1])
+      q2 = ::UnitQuaternion.fromAngleAxis(0, Vector[1,1,1,1])
     end
   end
 
   def test_getAngleAxis
     axis = Vector[1, 2, 3]
     angle = 0.4321
-    q = ::Quaternion.fromAngleAxis(angle, axis)
+    q = ::UnitQuaternion.fromAngleAxis(angle, axis)
     result_angle, result_axis = q.getAngleAxis()
 
     assert_operator((axis.normalize() - result_axis).norm(), :<, 1e-15)
@@ -56,11 +56,11 @@ class TestQuaternion < Test::Unit::TestCase
   def test_multiply_inverse
     axis1 = Vector[1, 2, 3]
     angle1 = 1.123
-    q1 = ::Quaternion.fromAngleAxis(angle1, axis1)
+    q1 = ::UnitQuaternion.fromAngleAxis(angle1, axis1)
 
     axis2 = Vector[1, 2, 3]
     angle2 = -1.123
-    q2 = ::Quaternion.fromAngleAxis(angle2, axis2)
+    q2 = ::UnitQuaternion.fromAngleAxis(angle2, axis2)
 
     q3 = q1 * q2
     beta0, beta_s = q3.get()
@@ -71,11 +71,11 @@ class TestQuaternion < Test::Unit::TestCase
   def test_multiply
     axis1 = Vector[3, 1, 6]
     angle1 = 1.32
-    q1 = ::Quaternion.fromAngleAxis(angle1, axis1)
+    q1 = ::UnitQuaternion.fromAngleAxis(angle1, axis1)
 
     axis2 = Vector[1, 1, 1]
     angle2 = Math::PI/4
-    q2 = ::Quaternion.fromAngleAxis(angle2, axis2)
+    q2 = ::UnitQuaternion.fromAngleAxis(angle2, axis2)
 
     q_result = q2*q1
     q_result_mat = q_result.getRotationMatrix()
@@ -91,7 +91,7 @@ class TestQuaternion < Test::Unit::TestCase
   def test_transform
     axis = Vector[1,1,1]
     angle = 2*Math::PI/3
-    q1 = ::Quaternion.fromAngleAxis(angle, axis)
+    q1 = ::UnitQuaternion.fromAngleAxis(angle, axis)
 
     v = Vector[1,0,0]
     v_rot = q1.transform(v)
@@ -104,10 +104,10 @@ class TestQuaternion < Test::Unit::TestCase
     roll = -Math::PI/2
     pitch = -Math::PI/2
     yaw = -Math::PI/2
-    q = ::Quaternion.new
+    q = ::UnitQuaternion.new
     q.setRollPitchYawXYZ(roll, pitch, yaw)
 
-    q2 = ::Quaternion.fromAngleAxis(-Math::PI/2, Vector[0, 1, 0])
+    q2 = ::UnitQuaternion.fromAngleAxis(-Math::PI/2, Vector[0, 1, 0])
 
     assert_in_delta(q.get()[0], q2.get()[0], 1e-15)
     assert_operator((q.get()[1] - q2.get()[1]).norm(), :<, 1e-15)
@@ -117,7 +117,7 @@ class TestQuaternion < Test::Unit::TestCase
     angles = [ [0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1], [0, -Math::PI/2, 0] ]
 
     for roll, pitch, yaw in angles
-      q = ::Quaternion.fromRollPitchYawXYZ(roll, pitch, yaw)
+      q = ::UnitQuaternion.fromRollPitchYawXYZ(roll, pitch, yaw)
       
       r, p, y = q.getRollPitchYawXYZ()
 
@@ -146,7 +146,7 @@ class TestQuaternion < Test::Unit::TestCase
     angles = [ 0, Math::PI/4, 0.1234, Math::PI/2, 2 ]
     axes = [ Vector[1,1,1], Vector[1,2,3], Vector[0,0,1] ]
     for angle, axis in angles.product(axes)
-      q = ::Quaternion.fromAngleAxis(angle, axis)
+      q = ::UnitQuaternion.fromAngleAxis(angle, axis)
       q_inv = q.inverse()
 
       assert(isIdentityMatrix( q.getRotationMatrix() *
