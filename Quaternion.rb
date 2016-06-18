@@ -32,6 +32,18 @@ class Quaternion
     return self.conjugate() / self.norm() ** 2
   end
 
+  def +(q)
+    # adds two quaternions
+    beta0, beta_s = q.get()
+    return Quaternion.new(@beta0 + beta0, *(@beta_s + beta_s))
+  end
+
+  def -(q)
+    # subtracts two quaternions
+    beta0, beta_s = q.get()
+    return Quaternion.new(@beta0 - beta0, *(@beta_s - beta_s))
+  end
+
   def /(s)
     # divides a quaternion by a scalar
     return Quaternion.new(@beta0 / s, *(@beta_s / s))

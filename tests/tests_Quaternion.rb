@@ -59,4 +59,22 @@ class TestQuaternion < Test::Unit::TestCase
       assert_in_delta(beta_s.norm(), 0, 1e-15)
     end
   end
+
+  def test_add
+    for q, q2 in @quats.zip(@quats)
+      sum = q + q2
+      assert_in_delta(sum.get()[0], q.get()[0] + q2.get()[0], 1e-15)
+      assert_in_delta((sum.get()[1] - (q.get()[1] + q2.get()[1])).norm(),
+                      1e-15)
+    end
+  end
+
+  def test_subtract
+    for q, q2 in @quats.zip(@quats)
+      sum = q - q2
+      assert_in_delta(sum.get()[0], q.get()[0] - q2.get()[0], 1e-15)
+      assert_in_delta((sum.get()[1] - (q.get()[1] - q2.get()[1])).norm(),
+                      1e-15)
+    end
+  end
 end
