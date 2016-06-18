@@ -82,8 +82,9 @@ class Quaternion
     end
   end
 
-  def print
-    puts "(#{@beta0}, #{@beta_s})"
+  def to_s
+    # converts the quaternion to a string
+    return "(" + @beta0.to_s + ", " + @beta_s.to_s + ")"
   end
 
   private
