@@ -4,6 +4,28 @@ require_relative '../UnitQuaternion'
 
 class TestUnitQuaternion < Test::Unit::TestCase
 
+  def test_initialize
+    q = ::UnitQuaternion.new(0.1, 0.1, 0.1)
+    beta0, beta_s = q.get()
+    assert_equal(0.9848857801796105, beta0)
+    assert_equal(Vector[0.1, 0.1, 0.1], beta_s)
+    assert_equal(1, beta0**2 + beta_s.norm()**2)
+
+    assert_raise(ArgumentError) do
+      q = ::UnitQuaternion.new(1,1,1)
+    end
+
+    q = ::UnitQuaternion.new(1, 0, 0, 0)
+    beta0, beta_s = q.get()
+    assert_equal(1, beta0)
+    assert_equal(Vector[0,0,0], beta_s)
+
+    q = ::UnitQuaternion.new(1, 1, 1, 1)
+    beta0, beta_s = q.get()
+    assert_in_delta(0.5, beta0, 1e-15)
+    assert_operator((Vector[0.5, 0.5, 0.5] - beta_s).norm(), :<, 1e-15)
+  end
+
   def test_set
     q = ::UnitQuaternion.new
     q.set(0.1, 0.1, 0.1)
@@ -15,6 +37,16 @@ class TestUnitQuaternion < Test::Unit::TestCase
     assert_raise(ArgumentError) do
       q.set(1,1,1)
     end
+
+    q.set(1, 0, 0, 0)
+    beta0, beta_s = q.get()
+    assert_equal(1, beta0)
+    assert_equal(Vector[0,0,0], beta_s)
+
+    q.set(1, 1, 1, 1)
+    beta0, beta_s = q.get()
+    assert_in_delta(0.5, beta0, 1e-15)
+    assert_operator((Vector[0.5, 0.5, 0.5] - beta_s).norm(), :<, 1e-15)
   end
 
   def test_setAngleAxis
