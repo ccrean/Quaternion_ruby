@@ -73,6 +73,15 @@ class Quaternion
     end
   end
 
+  def ==(q)
+    # checks whether or not two quaternions are equal
+    if get() == q.get()
+      return true
+    else
+      return false
+    end
+  end
+
   def print
     puts "(#{@beta0}, #{@beta_s})"
   end

@@ -108,4 +108,13 @@ class TestQuaternion < Test::Unit::TestCase
       assert_in_delta(q.normalize().norm(), 1, 1e-15)
     end
   end
+
+  def test_equality
+    for q in @quats
+      assert_equal(q, q)
+    end
+
+    assert(Quaternion.new(1,2,3,4) != Quaternion.new(4,3,2,1))
+    assert(Quaternion.new(0,0,0,0) != Quaternion.new(1,1,1,1))
+  end
 end
