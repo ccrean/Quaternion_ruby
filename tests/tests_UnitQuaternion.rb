@@ -211,7 +211,9 @@ class TestUnitQuaternion < Test::Unit::TestCase
   end
 
   def test_getRollPitchYawXYZ
-    angles = [ [0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1], [0, -Math::PI/2, 0] ]
+    angles = [ [0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1], [Math::PI/2, 0, 0],
+               [0, Math::PI/2, 0], [0, 0, Math::PI/2], [-Math::PI/2, 0, 0],
+               [0, -Math::PI/2, 0], [0, 0, -Math::PI/2], ]
 
     for roll, pitch, yaw in angles
       q = ::UnitQuaternion.fromRollPitchYawXYZ(roll, pitch, yaw)
