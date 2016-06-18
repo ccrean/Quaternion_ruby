@@ -117,15 +117,4 @@ class UnitQuaternion < Quaternion
     result.set(*(-1*@beta_s))
     return result
   end
-
-  def *(q)
-    # multiplies two quaternions and returns the result
-    q_beta0, q_beta_s = q.get()
-    beta0 = @beta0 * q_beta0 - @beta_s.inner_product(q_beta_s)
-    beta_s =  @beta0 * q_beta_s + q_beta0 * @beta_s +
-      cross_product(@beta_s, q_beta_s)
-    result = UnitQuaternion.new
-    result.set(beta_s[0], beta_s[1], beta_s[2])
-    return result
-  end
 end

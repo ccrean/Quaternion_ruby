@@ -68,7 +68,7 @@ class Quaternion
       beta0 = @beta0 * q_beta0 - @beta_s.inner_product(q_beta_s)
       beta_s =  @beta0 * q_beta_s + q_beta0 * @beta_s +
         cross_product(@beta_s, q_beta_s)
-      result = Quaternion.new(beta0, *beta_s)
+      result = self.class.new(beta0, *beta_s)
       return result
     end
   end
