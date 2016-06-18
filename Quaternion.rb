@@ -7,6 +7,11 @@ class Quaternion
     @beta_s = Vector[x,y,z]
   end
 
+  def set(w, x, y, z)
+    @beta0 = w
+    @beta_s = Vector[x,y,z]
+  end
+
   def get
     # returns the values in the quaternion
     return @beta0, @beta_s
