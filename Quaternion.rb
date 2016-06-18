@@ -111,6 +111,7 @@ class Quaternion
   end
 
   def *(q)
+    # multiplies two quaternions and returns the result
     q_beta0, q_beta_s = q.get()
     beta0 = @beta0 * q_beta0 - @beta_s.inner_product(q_beta_s)
     beta_s =  @beta0 * q_beta_s + q_beta0 * @beta_s +
