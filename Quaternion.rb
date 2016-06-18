@@ -32,6 +32,11 @@ class Quaternion
     return self.conjugate() / self.norm() ** 2
   end
 
+  def normalize
+    # returns a normalized quaternion
+    return self / norm()
+  end
+
   def +(q)
     # adds two quaternions
     beta0, beta_s = q.get()

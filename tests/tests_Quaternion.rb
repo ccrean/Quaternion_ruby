@@ -77,4 +77,11 @@ class TestQuaternion < Test::Unit::TestCase
                       1e-15)
     end
   end
+
+  def test_normalize
+    q = ::Quaternion.new(1,1,1,1)
+    beta0, beta_s = q.normalize().get()
+    assert_in_delta(0.5, beta0, 1e-15)
+    assert_in_delta((Vector[0.5,0.5,0.5] - beta_s).norm(), 0, 1e-15)
+  end
 end
