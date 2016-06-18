@@ -7,7 +7,9 @@ class TestQuaternion < Test::Unit::TestCase
   def setup
     @quats = [ ::Quaternion.new(1,2,3,4),
                ::Quaternion.new(0.1, 0.01, 2.3, 4),
-               ::Quaternion.new(1234.4134, 689.6124, 134.124, 0.5) ]
+               ::Quaternion.new(1234.4134, 689.6124, 134.124, 0.5),
+               ::Quaternion.new(1,1,1,1),
+             ]
   end
 
   def test_initialize
@@ -48,17 +50,24 @@ class TestQuaternion < Test::Unit::TestCase
     q = ::Quaternion.new(1, 2, 3, 4)
     assert_equal(Math.sqrt(1**2 + 2**2 + 3**2 + 4**2), q.norm())
 
+    assert_equal(0, ::Quaternion.new(0,0,0,0).norm())
+
     for q in @quats
       assert_in_delta(q.norm(), Math.sqrt((q*q.conjugate()).get[0]), 1e-15)
     end
   end
 
-  def test_conjugate
+  def test_conjugate_multiply
+    # tests the conjugate and * methods
     q = ::Quaternion.new(1, 1, 3, 1)
     q_c = q.conjugate()
     beta0, beta_s = q_c.get()
     assert_equal(1, beta0)
     assert_equal(Vector[-1,-3,-1], beta_s)
+
+    for q in @quats
+      assert_in_delta((q*q.conjugate()).get[1].norm(), 0, 1e-15)
+    end
   end
 
   def test_inverse
@@ -94,5 +103,9 @@ class TestQuaternion < Test::Unit::TestCase
     beta0, beta_s = q.normalize().get()
     assert_in_delta(0.5, beta0, 1e-15)
     assert_in_delta((Vector[0.5,0.5,0.5] - beta_s).norm(), 0, 1e-15)
+
+    for q in @quats
+      assert_in_delta(q.normalize().norm(), 1, 1e-15)
+    end
   end
 end
