@@ -4,12 +4,12 @@ require_relative 'Quaternion'
 class UnitQuaternion < Quaternion
 
   def initialize(*args)
-    if args.length() == 4 or args.length() == 3
+    if args.length() == 4
       set(*args)
     elsif args.length() == 0
       super(1, 0, 0, 0)
     else
-      raise(ArgumentError, "wrong number of arguments (must be 0, 3, or  4)")
+      raise(ArgumentError, "wrong number of arguments (must be 0 or 4)")
     end
   end
 
@@ -29,22 +29,10 @@ class UnitQuaternion < Quaternion
     return q
   end
 
-  def set(*args)
-    # sets Euler parameters
-    if args.length() == 4
-      super(*args)
-      @beta0, @beta_s = normalize().get()
-    elsif args.length() == 3
-      beta1, beta2, beta3 = args
-      if (beta1**2 + beta2**2 + beta3**2) > 1
-        raise(ArgumentError, "The sum of the squares of the arguments " +
-              "must be less than or equal to 1")
-      end
-      @beta0 = Math.sqrt(1 - (beta1**2 + beta2**2 + beta3**2))
-      @beta_s = Vector[beta1, beta2, beta3]
-    else
-      raise(ArgumentError, "wrong number of arguments (must be 3 or 4)")
-    end
+  def set(w, x, y, z)
+    # sets the values of the quaternion
+    super(w, x, y, z)
+    @beta0, @beta_s = normalize().get()
   end
 
   def setAngleAxis(angle, axis)

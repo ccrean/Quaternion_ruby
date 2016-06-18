@@ -17,7 +17,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
   end
 
   def test_initialize
-    q = ::UnitQuaternion.new(0.1, 0.1, 0.1)
+    q = ::UnitQuaternion.new(0.9848857801796105, 0.1, 0.1, 0.1)
     beta0, beta_s = q.get()
     assert_equal(0.9848857801796105, beta0)
     assert_equal(Vector[0.1, 0.1, 0.1], beta_s)
@@ -40,7 +40,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
 
   def test_set
     q = ::UnitQuaternion.new
-    q.set(0.1, 0.1, 0.1)
+    q.set(0.9848857801796105, 0.1, 0.1, 0.1)
     beta0, beta_s = q.get()
     assert_equal(0.9848857801796105, beta0)
     assert_equal(Vector[0.1, 0.1, 0.1], beta_s)
