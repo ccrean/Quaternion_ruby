@@ -17,6 +17,16 @@ class Quaternion
     return @beta0, @beta_s
   end
 
+  def norm
+    # returns the magnitude of the quaternion
+    return Math.sqrt(@beta0**2 + @beta_s.norm()**2)
+  end
+
+  def conjugate
+    # returns the conjugate of the quaternion
+    return Quaternion.new(@beta0, *(-1*@beta_s))
+  end
+
   def print
     puts "(#{@beta0}, #{@beta_s})"
   end
