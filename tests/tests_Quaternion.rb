@@ -13,9 +13,20 @@ class TestQuaternion < Test::Unit::TestCase
   def test_initialize
     q = ::Quaternion.new(1,1,1,1)
     beta0, beta_s = q.get()
-
     assert_equal(1, beta0)
     assert_equal(Vector[1,1,1], beta_s)
+
+    q = ::Quaternion.new
+    beta0, beta_s = q.get()
+    assert_equal(0, beta0)
+    assert_equal(Vector[0,0,0], beta_s)
+
+    vals = [ [ 1 ], [ 1, 2 ], [ 1, 2, 3, 4, 5 ], [ 1, 2, 3, 4, 5, 6 ] ]
+    for v in vals
+      assert_raise(ArgumentError) do
+        q = ::Quaternion.new(*v)
+      end
+    end
   end
 
   def test_set

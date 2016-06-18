@@ -2,9 +2,14 @@ require 'matrix'
 
 class Quaternion
 
-  def initialize(w, x, y, z)
-    @beta0 = w
-    @beta_s = Vector[x,y,z]
+  def initialize(*args)
+    if args.length() == 4
+      set(*args)
+    elsif args.length() == 0
+      set(0, 0, 0, 0)
+    else
+      raise(ArgumentError, "wrong number of arguments (must be 0 or 4)")
+    end
   end
 
   def set(w, x, y, z)
