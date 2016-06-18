@@ -1,11 +1,11 @@
 require 'matrix'
+require_relative 'Quaternion'
 
-class UnitQuaternion
+class UnitQuaternion < Quaternion
 
   def initialize
     # initializes a quaternion from the vaules of the Euler parameters
-    @beta0 = 1
-    @beta_s = Vector[0, 0, 0]
+    super(1, 0, 0, 0)
   end
 
   def self.fromAngleAxis(angle, axis)
@@ -32,11 +32,6 @@ class UnitQuaternion
     end
     @beta0 = Math.sqrt(1 - (beta1**2 + beta2**2 + beta3**2))
     @beta_s = Vector[beta1, beta2, beta3]
-  end
-
-  def get
-    # returns Euler parameters
-    return @beta0, @beta_s
   end
 
   def setAngleAxis(angle, axis)
@@ -119,17 +114,5 @@ class UnitQuaternion
     result = UnitQuaternion.new
     result.set(beta_s[0], beta_s[1], beta_s[2])
     return result
-  end
-
-  def print
-    puts "(#{@beta0}, #{@beta_s})"
-  end
-
-  private
-  def cross_product(v1, v2)
-    # returns the cross product of vectors v1 and v2
-    return Vector[ v1[1]*v2[2] - v1[2]*v2[1],
-                   v1[2]*v2[0] - v1[0]*v2[2],
-                   v1[0]*v2[1] - v1[1]*v2[0] ]
   end
 end
