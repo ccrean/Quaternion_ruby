@@ -35,7 +35,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     q = ::UnitQuaternion.new(1, 1, 1, 1)
     beta0, beta_s = q.get()
     assert_in_delta(0.5, beta0, 1e-15)
-    assert_operator((Vector[0.5, 0.5, 0.5] - beta_s).norm(), :<, 1e-15)
+    assert_in_delta((Vector[0.5, 0.5, 0.5] - beta_s).norm(), 0, 1e-15)
   end
 
   def test_set
@@ -58,7 +58,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     q.set(1, 1, 1, 1)
     beta0, beta_s = q.get()
     assert_in_delta(0.5, beta0, 1e-15)
-    assert_operator((Vector[0.5, 0.5, 0.5] - beta_s).norm(), :<, 1e-15)
+    assert_in_delta((Vector[0.5, 0.5, 0.5] - beta_s).norm(), 0, 1e-15)
   end
 
   def test_setAngleAxis
@@ -102,7 +102,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     q = ::UnitQuaternion.fromAngleAxis(angle, axis)
     result_angle, result_axis = q.getAngleAxis()
 
-    assert_operator((axis.normalize() - result_axis).norm(), :<, 1e-15)
+    assert_in_delta((axis.normalize() - result_axis).norm(), 0, 1e-15)
     assert_in_delta(angle, result_angle, 1e-15)
 
     for angle, axis in @angles.product(@axes)
@@ -151,8 +151,8 @@ class TestUnitQuaternion < Test::Unit::TestCase
     mat_result = q2.getRotationMatrix() * q1.getRotationMatrix()
     
     for i in 0..2
-      assert_operator((q_result_mat.row(i) - mat_result.row(i)).norm(),
-                      :<, 1e-15)
+      assert_in_delta((q_result_mat.row(i) - mat_result.row(i)).norm(),
+                      0, 1e-15)
     end
 
     for q1, q2 in @quats.product(@quats)
@@ -176,7 +176,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     v_rot = q1.transform(v)
     expected = Vector[0,1,0]
 
-    assert_operator((v_rot - expected).norm(), :<, 1e-15)
+    assert_in_delta((v_rot - expected).norm(), 0, 1e-15)
 
     for q, v in @quats.product(@axes)
       v_rot = q.transform(v)
@@ -195,7 +195,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     q2 = ::UnitQuaternion.fromAngleAxis(-Math::PI/2, Vector[0, 1, 0])
 
     assert_in_delta(q.get()[0], q2.get()[0], 1e-15)
-    assert_operator((q.get()[1] - q2.get()[1]).norm(), :<, 1e-15)
+    assert_in_delta((q.get()[1] - q2.get()[1]).norm(), 0, 1e-15)
   end
 
   def test_getRollPitchYawXYZ
@@ -242,7 +242,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
       result = q * q_inv
       beta0, beta_s = result.get()
       assert_in_delta(beta0, 1, 1e-15)
-      assert_operator((beta_s - Vector[0,0,0]).norm(), :<, 1e-15)
+      assert_in_delta((beta_s - Vector[0,0,0]).norm(), 0, 1e-15)
     end
   end
 end
