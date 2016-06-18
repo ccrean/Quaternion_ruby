@@ -39,4 +39,17 @@ class TestQuaternion < Test::Unit::TestCase
     assert_equal(1, beta0)
     assert_equal(Vector[-1,-3,-1], beta_s)
   end
+
+  def test_inverse
+    quats = [ ::Quaternion.new(1,2,3,4),
+              ::Quaternion.new(0.1, 0.01, 2.3, 4),
+              ::Quaternion.new(1234.4134, 689.6124, 134.124, 0.5) ]
+    for q in quats
+      q_inv = q.inverse()
+      q_result = q * q_inv
+      beta0, beta_s = q_result.get()
+      assert_in_delta(1, beta0, 1e-15)
+      assert_in_delta(beta_s.norm(), 0, 1e-15)
+    end
+  end
 end

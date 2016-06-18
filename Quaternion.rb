@@ -27,6 +27,30 @@ class Quaternion
     return Quaternion.new(@beta0, *(-1*@beta_s))
   end
 
+  def inverse
+    # returns the multiplicative inverse of the quaterion
+    return self.conjugate() / self.norm() ** 2
+  end
+
+  def /(s)
+    # divides a quaternion by a scalar
+    return Quaternion.new(@beta0 / s, *(@beta_s / s))
+  end
+
+  def *(q)
+    # multiplies q by a scalar or another quaternion
+    if q.is_a?(Numeric)
+      return Quaternion.new(@beta0 * q, *(@beta_s * q))
+    elsif q.is_a?(Quaternion)
+      q_beta0, q_beta_s = q.get()
+      beta0 = @beta0 * q_beta0 - @beta_s.inner_product(q_beta_s)
+      beta_s =  @beta0 * q_beta_s + q_beta0 * @beta_s +
+        cross_product(@beta_s, q_beta_s)
+      result = Quaternion.new(beta0, *beta_s)
+      return result
+    end
+  end
+
   def print
     puts "(#{@beta0}, #{@beta_s})"
   end
