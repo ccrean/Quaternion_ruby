@@ -4,17 +4,9 @@ This gem provides a Quaternion class, along with a UnitQuaternion class that is 
 
 ## Installation
 
-Add this line to your application's Gemfile:
+This gem is not available through any gem repository (yet).  Install it using:
 
-    gem 'Quaternion'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install Quaternion
+$ sudo rake install
 
 ## Usage
 
