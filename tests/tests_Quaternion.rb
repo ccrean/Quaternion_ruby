@@ -98,14 +98,14 @@ class TestQuaternion < Test::Unit::TestCase
     end
   end
 
-  def test_normalize
+  def test_normalized
     q = ::Quaternion.new(1,1,1,1)
-    beta0, beta_s = q.normalize().get()
+    beta0, beta_s = q.normalized().get()
     assert_in_delta(0.5, beta0, 1e-15)
     assert_in_delta((Vector[0.5,0.5,0.5] - beta_s).norm(), 0, 1e-15)
 
     for q in @quats
-      assert_in_delta(q.normalize().norm(), 1, 1e-15)
+      assert_in_delta(q.normalized().norm(), 1, 1e-15)
     end
   end
 

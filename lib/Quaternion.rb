@@ -37,7 +37,7 @@ class Quaternion
     return self.conjugate() / self.norm() ** 2
   end
 
-  def normalize
+  def normalized
     # returns a normalized quaternion
     return self / norm()
   end

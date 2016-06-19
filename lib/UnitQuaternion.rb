@@ -32,7 +32,7 @@ class UnitQuaternion < Quaternion
   def set(w, x, y, z)
     # sets the values of the quaternion
     super(w, x, y, z)
-    @beta0, @beta_s = normalize().get()
+    @beta0, @beta_s = normalized().get()
   end
 
   def setAngleAxis(angle, axis)
