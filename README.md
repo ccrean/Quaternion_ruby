@@ -1,11 +1,11 @@
 # Quaternion
 
-This gem provides a Quaternion class, along with a UnitQuaternion
+This package provides a Quaternion class, along with a UnitQuaternion
 class that is designed to be used to represent rotations.
 
 ## Installation
 
-This gem is not available through any gem repository (yet).  Install it using:
+This package is not available through any gem repository (yet).  Install it using:
 
 $ sudo rake install
 
@@ -15,6 +15,7 @@ The Quaternion and UnitQuaternion classes must be included separately
 in your program, using the following lines:
 
 require 'Quaternion'
+
 require 'UnitQuaternion'
 
 Note that requiring UnitQuaternion will automatically give you access
