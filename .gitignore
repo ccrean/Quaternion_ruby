@@ -2,3 +2,4 @@
 #*
 other/*
 Gemfile.lock
+pkg/*
