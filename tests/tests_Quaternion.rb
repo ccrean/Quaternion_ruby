@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'matrix'
-require_relative '../Quaternion'
+require_relative '../lib/Quaternion'
 
 class TestQuaternion < Test::Unit::TestCase
 
