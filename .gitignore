@@ -1,5 +1,4 @@
 *~
-tester.rb
-benchmark.rb
-todo.txt
 #*
+other/*
+Gemfile.lock
