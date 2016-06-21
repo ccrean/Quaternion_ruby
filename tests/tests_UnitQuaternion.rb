@@ -14,6 +14,11 @@ class TestUnitQuaternion < Test::Unit::TestCase
                 0.5,  0.25, 0.1234, ]
     @axes = [ Vector[ 1, 1, 1 ], Vector[ 1, 0, 0 ], Vector[ 0, 1, 0 ],
               Vector[ 0, 0, 1 ], Vector[ 1, 2, 3 ], ]
+    @euler = []
+    ['x', 'y', 'z'].permutation() do |s|
+      @euler << s.join("")
+      @euler << s.join("").upcase()
+    end
   end
 
   def test_initialize
@@ -259,5 +264,51 @@ class TestUnitQuaternion < Test::Unit::TestCase
       assert_in_delta(beta0, 1, 1e-15)
       assert_in_delta((beta_s - Vector[0,0,0]).norm(), 0, 1e-15)
     end
+  end
+
+  def test_Euler
+    # If we generate a quaternion using Euler angles and then ask for
+    # the Euler angles from that quaternion, we may get a different
+    # answer, since the Euler angles are not necessarily unique.
+    # However, if we ask for the Euler angles from the first
+    # quaternion, then generate a second quaternion using those same
+    # Euler angles, the quaternions should be equal to each other.
+
+    def areEqualMatrices(m1, m2, tol)
+      m1.zip(m2).each() do |v1, v2|
+        if (v1 - v2).abs() > tol
+          print("Error = ", (v1 - v2).abs(), "\n")
+          return false
+        end
+      end
+      return true
+    end
+
+    # When one of the angles is equal to 2*PI, we can either rotate
+    # clockwise or counter-clockwise about the axis of rotation and get
+    # the same quaternion, so our test breaks down
+    @euler.product(@angles, @angles, @angles) do | e, theta1, theta2, theta3 |
+      # When all three angles are equal to 2*pi, we can either get the
+      # quaternion (1, 0, 0, 0) or (-1, 0, 0, 0)
+      q = UnitQuaternion.fromEuler(theta1, theta2, theta3, e)
+      q2 = UnitQuaternion.fromEuler(*q.getEuler(e), e)
+      tol = 1e-15
+      if not areEqualMatrices(q.getRotationMatrix(),
+                              q2.getRotationMatrix(),
+                              tol)
+        puts q
+        puts q2
+        puts q.getRotationMatrix()
+        puts q2.getRotationMatrix()
+        puts theta1, theta2, theta3, e
+        puts q.getEuler(e)
+      end
+      assert(areEqualMatrices(q.getRotationMatrix(),
+                              q2.getRotationMatrix(), tol))
+    end
+
+    q = UnitQuaternion.fromEuler(2 * Math::PI/2, 2 * Math::PI/2,
+                                 2 * Math::PI/2)
+    assert_in_delta((q - UnitQuaternion.new(-1,0,0,0)).norm(), 0, 1e-15)
   end
 end
