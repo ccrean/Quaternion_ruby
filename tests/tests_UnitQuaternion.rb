@@ -308,7 +308,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     end
 
     q = UnitQuaternion.fromEuler(2 * Math::PI/2, 2 * Math::PI/2,
-                                 2 * Math::PI/2)
+                                 2 * Math::PI/2, 'xyz')
     assert_in_delta((q - UnitQuaternion.new(-1,0,0,0)).norm(), 0, 1e-15)
   end
 end

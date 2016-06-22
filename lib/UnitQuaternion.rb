@@ -160,7 +160,7 @@ class UnitQuaternion < Quaternion
     p_mat_rows << getUnitVector(unused[0])
     
     p_mat = Matrix.rows(p_mat_rows)
-    rot_mat = p_mat.transpose() * getRotationMatrix() * p_mat
+    rot_mat = p_mat * getRotationMatrix() * p_mat.transpose()
     puts "R = ", getRotationMatrix()
     puts "P = ", p_mat
     puts "R' = ", rot_mat
@@ -215,6 +215,9 @@ class UnitQuaternion < Quaternion
       end
       print("theta2 = ", theta2, "\n")
       print("cos(theta2) = ", Math.cos(theta2), "\n")
+      print("rh = ", rh, "\n")
+      print("static = ", static, "\n")
+      print("axes = ", axes, "\n")
       if Math.cos(theta2).abs() < tol
         # if cos(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
