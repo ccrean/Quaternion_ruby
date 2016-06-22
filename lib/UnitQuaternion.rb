@@ -110,6 +110,8 @@ class UnitQuaternion < Quaternion
             "calculate the Euler angles")
     end
 
+    tol = 1e-7
+
     if axes == axes.upcase()
       # get angles about global axes
       static = true
@@ -177,7 +179,7 @@ class UnitQuaternion < Quaternion
           theta2 = Math::PI
         end
       end
-      if Math.sin(theta2).abs() < 1e-15
+      if Math.sin(theta2).abs() < tol
         # if sin(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
         # theta3 + theta1, not the individual angles.  Here, we choose
@@ -213,7 +215,7 @@ class UnitQuaternion < Quaternion
       end
       print("theta2 = ", theta2, "\n")
       print("cos(theta2) = ", Math.cos(theta2), "\n")
-      if Math.cos(theta2).abs() < 1e-15
+      if Math.cos(theta2).abs() < tol
         # if cos(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
         # theta3 + theta1.  Here, we choose theta3 = 0 and solve for

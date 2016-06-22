@@ -292,7 +292,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
       # quaternion (1, 0, 0, 0) or (-1, 0, 0, 0)
       q = UnitQuaternion.fromEuler(theta1, theta2, theta3, e)
       q2 = UnitQuaternion.fromEuler(*q.getEuler(e), e)
-      tol = 1e-15
+      tol = 1e-7
       if not areEqualMatrices(q.getRotationMatrix(),
                               q2.getRotationMatrix(),
                               tol)
