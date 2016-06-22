@@ -2,6 +2,16 @@ require 'test/unit'
 require 'matrix'
 require_relative '../lib/UnitQuaternion'
 
+def areEqualMatrices(m1, m2, tol)
+  m1.zip(m2).each() do |v1, v2|
+    if (v1 - v2).abs() > tol
+      print("Error = ", (v1 - v2).abs(), "\n")
+      return false
+    end
+  end
+  return true
+end
+
 class TestUnitQuaternion < Test::Unit::TestCase
 
   def setup
@@ -115,11 +125,16 @@ class TestUnitQuaternion < Test::Unit::TestCase
     assert_in_delta((axis.normalize() - result_axis).norm(), 0, 1e-15)
     assert_in_delta(angle, result_angle, 1e-15)
 
+    # The angle-axis representation of a rotation is not unique.  We could
+    # reverse the sign of both the angle and axis, or when the angle is a
+    # multiple of 2*PI, any axis will do.  Therefore, we compare rotation
+    # matrices instead of angles and axes.
     for angle, axis in @angles.product(@axes)
       q = ::UnitQuaternion.fromAngleAxis(angle, axis)
       a, ax = q.getAngleAxis()
-      assert_in_delta(angle, a, 1e-14)
-      assert_in_delta((ax - axis.normalize()).norm(), 0, 1e-13)
+      q2 = ::UnitQuaternion.fromAngleAxis(a, ax)
+      assert(areEqualMatrices(q.getRotationMatrix(), q2.getRotationMatrix(),
+                              1e-7))
     end
   end
 
@@ -278,16 +293,6 @@ class TestUnitQuaternion < Test::Unit::TestCase
     # However, if we ask for the Euler angles from the first
     # quaternion, then generate a second quaternion using those same
     # Euler angles, the quaternions should be equal to each other.
-
-    def areEqualMatrices(m1, m2, tol)
-      m1.zip(m2).each() do |v1, v2|
-        if (v1 - v2).abs() > tol
-          print("Error = ", (v1 - v2).abs(), "\n")
-          return false
-        end
-      end
-      return true
-    end
 
     @angles.product(@angles, @angles) do | theta1, theta2, theta3 |
       q = UnitQuaternion.fromEuler(theta1, theta2, theta3, 'xyz')

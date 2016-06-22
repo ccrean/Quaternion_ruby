@@ -62,7 +62,15 @@ class UnitQuaternion < Quaternion
     # return the angle-axis representation of the rotation contained in
     # this quaternion
     angle = 2*Math.acos(@beta0)
-    axis = @beta_s / Math.sin(angle/2)
+    
+    # if sin(theta/2) = 0, then theta = 2*n*PI, where n is any integer,
+    # which means that the object has performed a complete rotation, and
+    # any axis will do
+    if Math.sin(angle/2).abs() < 1e-15
+      axis = Vector[1, 0, 0]
+    else
+      axis = @beta_s / Math.sin(angle/2)
+    end
     return angle, axis
   end
 
