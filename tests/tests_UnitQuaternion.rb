@@ -12,6 +12,21 @@ def areEqualMatrices(m1, m2, tol)
   return true
 end
 
+def isIdentityMatrix(m, tol)
+  for i, j in [0,1,2].product([0,1,2])
+    if i == j
+      if (m[i,j] - 1).abs > tol
+        return false
+      end
+    else
+      if m[i,j].abs > tol
+        return false
+      end
+    end
+  end
+  return true
+end
+
 class TestUnitQuaternion < Test::Unit::TestCase
 
   def setup
@@ -210,22 +225,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
     end
   end
 
-  def test_inverse
-    def isIdentityMatrix(m, tol)
-      for i, j in [0,1,2].product([0,1,2])
-        if i == j
-          if (m[i,j] - 1).abs > tol
-            return false
-          end
-        else
-          if m[i,j].abs > tol
-            return false
-          end
-        end
-      end
-      return true
-    end
-    
+  def test_inverse    
     angles = [ 0, Math::PI/4, 0.1234, Math::PI/2, 2 ]
     axes = [ Vector[1,1,1], Vector[1,2,3], Vector[0,0,1] ]
     for angle, axis in (angles + @angles).product(axes + @axes)
@@ -275,5 +275,21 @@ class TestUnitQuaternion < Test::Unit::TestCase
     q = UnitQuaternion.fromEuler(2 * Math::PI/2, 2 * Math::PI/2,
                                  2 * Math::PI/2, 'xyz')
     assert_in_delta((q - UnitQuaternion.new(-1,0,0,0)).norm(), 0, 1e-15)
+  end
+
+  def test_rotationMatrix
+    tol = 1e-7
+    @angles.product(@angles, @angles) do | theta1, theta2, theta3 |
+      q = ::UnitQuaternion.fromEuler(theta1, theta2, theta3, 'XYZ')
+
+      q_from = ::UnitQuaternion.fromRotationMatrix(q.getRotationMatrix())
+      q_set = ::UnitQuaternion.new()
+      q_set.setRotationMatrix(q.getRotationMatrix())
+
+      assert(areEqualMatrices(q.getRotationMatrix(),
+                              q_from.getRotationMatrix(), tol))
+      assert(areEqualMatrices(q.getRotationMatrix(),
+                              q_set.getRotationMatrix(), tol))
+    end
   end
 end

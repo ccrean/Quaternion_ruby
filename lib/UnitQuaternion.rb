@@ -16,7 +16,7 @@ class UnitQuaternion < Quaternion
   def self.fromAngleAxis(angle, axis)
     # intializes a quaternion from the angle-axis representation of a
     # rotation
-    q = UnitQuaternion.new
+    q = UnitQuaternion.new()
     q.setAngleAxis(angle, axis)
     return q
   end
@@ -24,6 +24,12 @@ class UnitQuaternion < Quaternion
   def self.fromEuler(theta1, theta2, theta3, axes)
     q = UnitQuaternion.new()
     q.setEuler(theta1, theta2, theta3, axes)
+    return q
+  end
+
+  def self.fromRotationMatrix(mat)
+    q = UnitQuaternion.new()
+    q.setRotationMatrix(mat)
     return q
   end
 
@@ -110,8 +116,6 @@ class UnitQuaternion < Quaternion
             "calculate the Euler angles")
     end
 
-    tol = 1e-7
-
     if axes == axes.upcase()
       # get angles about global axes
       static = true
@@ -166,6 +170,86 @@ class UnitQuaternion < Quaternion
     # puts "R' = ", rot_mat
     # print("rh = ", rh, "\n")
 
+    theta1, theta2, theta3 = parseMatrix(rot_mat, same)
+
+    # print("theta1 = ", theta1, "\ntheta2 = ", theta2, "\ntheta3 = ",
+    #       theta3, "\n")
+      
+    if not static
+      theta1, theta3 = theta3, theta1
+    end
+
+    if not rh
+      theta1, theta2, theta3 = -theta1, -theta2, -theta3
+    end
+
+    return theta1, theta2, theta3
+  end
+
+  def setRotationMatrix(mat)
+    theta1, theta2, theta3 = parseMatrix(mat, false)
+    setEuler(theta1, theta2, theta3, 'XYZ')
+  end
+
+  def getRotationMatrix
+    # returns the rotation matrix corresponding to this quaternion
+    return Matrix[ [ 1 - 2*@beta_s[1]**2 - 2*@beta_s[2]**2,
+                     2*(@beta_s[0]*@beta_s[1] - @beta0*@beta_s[2]),
+                     2*(@beta_s[0]*@beta_s[2] + @beta0*@beta_s[1]) ],
+                   [ 2*(@beta_s[0]*@beta_s[1] + @beta0*@beta_s[2]),
+                     1 - 2*@beta_s[0]**2 - 2*@beta_s[2]**2,
+                     2*(@beta_s[1]*@beta_s[2] - @beta0*@beta_s[0]) ],
+                   [ 2*(@beta_s[0]*@beta_s[2] - @beta0*@beta_s[1]),
+                     2*(@beta0*@beta_s[0] + @beta_s[1]*@beta_s[2]),
+                     1 - 2*@beta_s[0]**2 - 2*@beta_s[1]**2 ] ]
+  end
+
+  def transform(vec)
+    # transforms vec by applying the rotation represented by this
+    # quaternion, and returns the result
+    return getRotationMatrix() * vec
+  end
+
+  def inverse
+    # returns the inverse of the quaternion
+    result = UnitQuaternion.new
+    result.set(@beta0, *(-1*@beta_s))
+    return result
+  end
+
+  private
+  def isRightHanded(axes)
+    if axes.length() != 3
+      raise(ArgumentError, "Only 3 axes permitted")
+    end
+    axes == axes.upcase()
+    if axes[0..1] == "XY" or axes[0..1] == "YZ" or axes[0..1] == "ZX"
+      return true
+    else
+      return false
+    end
+  end
+
+  def getUnitVector(axis)
+    axis = axis.upcase()
+    if axis == 'X'
+      return Vector[1, 0, 0]
+    elsif axis == 'Y'
+      return Vector[0, 1, 0]
+    elsif axis == 'Z'
+      return Vector[0, 0, 1]
+    else
+      raise(ArgumentError, "Axis can only be X/x, Y/y, or Z/z")
+    end
+  end
+
+  def parseMatrix(rot_mat, same)
+    # Extracts the Euler angles corresponding to the given matrix.  If
+    # same = false, this method returns the angles about the global X,
+    # Y, and Z axes (in that order).  If same = true, this method
+    # returns the Euler angles about the global X, Y, and X axes (in
+    # that order).
+    tol = 1e-7
     if same
       begin
         theta2 = Math.acos(rot_mat[0,0])
@@ -247,69 +331,34 @@ class UnitQuaternion < Quaternion
         theta3 = Math.atan2(sign * rot_mat[1,0], sign * rot_mat[0,0])
       end
     end
-    # print("theta1 = ", theta1, "\ntheta2 = ", theta2, "\ntheta3 = ",
-    #       theta3, "\n")
-      
-    if not static
-      theta1, theta3 = theta3, theta1
-    end
-
-    if not rh
-      theta1, theta2, theta3 = -theta1, -theta2, -theta3
-    end
 
     return theta1, theta2, theta3
   end
 
-  def getRotationMatrix
-    # returns the rotation matrix corresponding to this quaternion
-    return Matrix[ [ 1 - 2*@beta_s[1]**2 - 2*@beta_s[2]**2,
-                     2*(@beta_s[0]*@beta_s[1] - @beta0*@beta_s[2]),
-                     2*(@beta_s[0]*@beta_s[2] + @beta0*@beta_s[1]) ],
-                   [ 2*(@beta_s[0]*@beta_s[1] + @beta0*@beta_s[2]),
-                     1 - 2*@beta_s[0]**2 - 2*@beta_s[2]**2,
-                     2*(@beta_s[1]*@beta_s[2] - @beta0*@beta_s[0]) ],
-                   [ 2*(@beta_s[0]*@beta_s[2] - @beta0*@beta_s[1]),
-                     2*(@beta0*@beta_s[0] + @beta_s[1]*@beta_s[2]),
-                     1 - 2*@beta_s[0]**2 - 2*@beta_s[1]**2 ] ]
-  end
+  def isOrthonormalMatrix(mat, tol)
+    # Determines if mat is orthonormal.  That is, determines whether
+    # mat.transpose() * mat is equal to the identity matrix (to within
+    # tol).
 
-  def transform(vec)
-    # transforms vec by applying the rotation represented by this
-    # quaternion, and returns the result
-    return getRotationMatrix() * vec
-  end
-
-  def inverse
-    # returns the inverse of the quaternion
-    result = UnitQuaternion.new
-    result.set(@beta0, *(-1*@beta_s))
-    return result
-  end
-
-  private
-  def isRightHanded(axes)
-    if axes.length() != 3
-      raise(ArgumentError, "Only 3 axes permitted")
-    end
-    axes == axes.upcase()
-    if axes[0..1] == "XY" or axes[0..1] == "YZ" or axes[0..1] == "ZX"
-      return true
-    else
+    n_rows = mat.row_size()
+    n_cols = mat.column_size()
+    if (n_rows != n_cols)
       return false
     end
-  end
-
-  def getUnitVector(axis)
-    axis = axis.upcase()
-    if axis == 'X'
-      return Vector[1, 0, 0]
-    elsif axis == 'Y'
-      return Vector[0, 1, 0]
-    elsif axis == 'Z'
-      return Vector[0, 0, 1]
-    else
-      raise(ArgumentError, "Axis can only be X/x, Y/y, or Z/z")
+    result = mat.transpose() * mat()
+    for i in (0...n_rows)
+      for j in (0...n_cols)
+        if i == j
+          if result[i,j] - 1.abs() > tol
+            return false
+          end
+        else
+          if result[i,j] > tol
+            return false
+          end
+        end
+      end
     end
+    return true
   end
 end
