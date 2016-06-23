@@ -256,7 +256,7 @@ class UnitQuaternion < Quaternion
       rescue Math::DomainError
         # the value of rot_mat[0,0] may be off slightly due to truncation
         # error
-        puts("rot_mat[0,0] = " + rot_mat[0,0].to_s + ".  Rounding.")
+        # puts("rot_mat[0,0] = " + rot_mat[0,0].to_s + ".  Rounding.")
         if rot_mat[0,0].abs() > 0
           theta2 = 0
         else
@@ -290,7 +290,7 @@ class UnitQuaternion < Quaternion
       rescue Math::DomainError
         # the value of rot_mat[2,0] may be off slightly due to truncation
         # error
-        puts("rot_mat[2,0] = " + rot_mat[2,0].to_s + ".  Rounding.")
+        # puts("rot_mat[2,0] = " + rot_mat[2,0].to_s + ".  Rounding.")
         if -rot_mat[2,0] > 0
           theta2 = Math::PI/2
         else
