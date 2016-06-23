@@ -210,48 +210,6 @@ class TestUnitQuaternion < Test::Unit::TestCase
     end
   end
 
-  def test_setRollPitchYawXYZ
-    roll = -Math::PI/2
-    pitch = -Math::PI/2
-    yaw = -Math::PI/2
-    q = ::UnitQuaternion.new
-    q.setRollPitchYawXYZ(roll, pitch, yaw)
-
-    q2 = ::UnitQuaternion.fromAngleAxis(-Math::PI/2, Vector[0, 1, 0])
-
-    assert_in_delta(q.get()[0], q2.get()[0], 1e-15)
-    assert_in_delta((q.get()[1] - q2.get()[1]).norm(), 0, 1e-15)
-
-    q = ::UnitQuaternion.fromRollPitchYawXYZ(Math::PI/2, 0, 0)
-    q2 = ::UnitQuaternion.fromAngleAxis(Math::PI/2, Vector[1, 0, 0])
-    assert_in_delta((q - q2).norm(), 0, 1e-15)
-
-    q = ::UnitQuaternion.fromRollPitchYawXYZ(0, Math::PI/2, 0)
-    q2 = ::UnitQuaternion.fromAngleAxis(Math::PI/2, Vector[0, 1, 0])
-    assert_in_delta((q - q2).norm(), 0, 1e-15)
-
-    q = ::UnitQuaternion.fromRollPitchYawXYZ(0, 0, Math::PI/2)
-    q2 = ::UnitQuaternion.fromAngleAxis(Math::PI/2, Vector[0, 0, 1])
-    assert_in_delta((q - q2).norm(), 0, 1e-15)
-  end
-
-  def test_getRollPitchYawXYZ
-    angles = [ [0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1], [Math::PI/2, 0, 0],
-               [0, Math::PI/2, 0], [0, 0, Math::PI/2], [-Math::PI/2, 0, 0],
-               [0, -Math::PI/2, 0], [0, 0, -Math::PI/2],
-               [0.01, 0.02, 0.03], ]
-
-    for roll, pitch, yaw in angles
-      q = ::UnitQuaternion.fromRollPitchYawXYZ(roll, pitch, yaw)
-      
-      r, p, y = q.getRollPitchYawXYZ()
-
-      assert_in_delta(roll, r, 1e-15)
-      assert_in_delta(pitch, p, 1e-15)
-      assert_in_delta(yaw, y, 1e-15)
-    end
-  end
-
   def test_inverse
     def isIdentityMatrix(m, tol)
       for i, j in [0,1,2].product([0,1,2])

@@ -21,14 +21,6 @@ class UnitQuaternion < Quaternion
     return q
   end
 
-  def self.fromRollPitchYawXYZ(roll, pitch, yaw)
-    # initializes a quaternion from roll, pitch, and yaw angles (about the
-    # x, y, and z axes, respectively)
-    q = UnitQuaternion.new
-    q.setRollPitchYawXYZ(roll, pitch, yaw)
-    return q
-  end
-
   def self.fromEuler(theta1, theta2, theta3, axes)
     q = UnitQuaternion.new()
     q.setEuler(theta1, theta2, theta3, axes)
@@ -267,31 +259,6 @@ class UnitQuaternion < Quaternion
     end
 
     return theta1, theta2, theta3
-  end
-
-  def setRollPitchYawXYZ(roll, pitch, yaw)
-    # sets the quaternion from the roll, pitch, and yaw angles
-    q_roll = UnitQuaternion.fromAngleAxis(roll, Vector[1,0,0])
-    q_pitch = UnitQuaternion.fromAngleAxis(pitch, Vector[0,1,0])
-    q_yaw = UnitQuaternion.fromAngleAxis(yaw, Vector[0,0,1])
-    result = q_roll * q_pitch * q_yaw
-    @beta0, @beta_s = result.get()
-  end
-
-  def getRollPitchYawXYZ
-    # returns the roll, pitch, and yaw angles corresponding to this
-    # quaternion
-    # roll = Math.atan2(2*(@beta0*@beta_s[0] + @beta_s[1]*@beta_s[2]),
-    #                   1 - 2*(@beta_s[0]**2 + @beta_s[1]**2))
-    # pitch = Math.asin(2*(@beta0*@beta_s[1] - @beta_s[2]*@beta_s[0]))
-    # yaw = Math.atan2(2*(@beta0*@beta_s[2] + @beta_s[0]*@beta_s[1]),
-    #                  1 - 2*(@beta_s[1]**2 + @beta_s[2]**2))
-    yaw = Math.atan2(-2*(@beta_s[0]*@beta_s[1] - @beta0*@beta_s[2]),
-                     1 - 2*(@beta_s[1]**2 + @beta_s[2]**2))
-    pitch = Math.asin(2*(@beta0*@beta_s[1] + @beta_s[2]*@beta_s[0]))
-    roll = Math.atan2(-2*(@beta_s[1]*@beta_s[2] - @beta0*@beta_s[0]),
-                      1 - 2*(@beta_s[0]**2 + @beta_s[1]**2))
-    return roll, pitch, yaw
   end
 
   def getRotationMatrix
