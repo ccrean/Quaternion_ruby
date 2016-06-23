@@ -187,6 +187,11 @@ class UnitQuaternion < Quaternion
   end
 
   def setRotationMatrix(mat)
+    tol = 1e-10
+    if not isOrthonormalMatrix(mat, tol)
+      raise(ArgumentError, "Matrix is not orthonormal (to within " +
+            tol.to_s(), ")")
+    end
     theta1, theta2, theta3 = parseMatrix(mat, false)
     setEuler(theta1, theta2, theta3, 'XYZ')
   end
@@ -345,7 +350,7 @@ class UnitQuaternion < Quaternion
     if (n_rows != n_cols)
       return false
     end
-    result = mat.transpose() * mat()
+    result = mat.transpose() * mat
     for i in (0...n_rows)
       for j in (0...n_cols)
         if i == j
