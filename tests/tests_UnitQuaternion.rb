@@ -247,10 +247,10 @@ class TestUnitQuaternion < Test::Unit::TestCase
   def test_Euler
     # If we generate a quaternion using Euler angles and then ask for
     # the Euler angles from that quaternion, we may get a different
-    # answer, since the Euler angles are not necessarily unique.
-    # However, if we ask for the Euler angles from the first
-    # quaternion, then generate a second quaternion using those same
-    # Euler angles, the quaternions should be equal to each other.
+    # answer, since the Euler angles are not unique.  However, if we
+    # ask for the Euler angles from the first quaternion, then
+    # generate a second quaternion using those same Euler angles, the
+    # quaternions should be equal to each other.
 
     @angles.product(@angles, @angles) do | theta1, theta2, theta3 |
       q = UnitQuaternion.fromEuler(theta1, theta2, theta3, 'xyz')
@@ -275,6 +275,13 @@ class TestUnitQuaternion < Test::Unit::TestCase
     q = UnitQuaternion.fromEuler(2 * Math::PI/2, 2 * Math::PI/2,
                                  2 * Math::PI/2, 'xyz')
     assert_in_delta((q - UnitQuaternion.new(-1,0,0,0)).norm(), 0, 1e-15)
+
+    assert_raise(ArgumentError) { q.getEuler('xy') }
+    assert_raise(ArgumentError) { q.getEuler('xYz') }
+    assert_raise(ArgumentError) { q.getEuler('xxy') }
+    assert_raise(ArgumentError) { q.getEuler('yyz') }
+    assert_raise(ArgumentError) { q.getEuler('xzz') }
+    assert_raise(ArgumentError) { q.getEuler('xzb') }
   end
 
   def test_rotationMatrix

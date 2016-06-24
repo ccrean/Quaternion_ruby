@@ -138,9 +138,8 @@ class UnitQuaternion < Quaternion
       raise(ArgumentError, 'Axes can only be X/x, Y/y, or Z/z')
     end
 
-    if axes[0..1].count('X') > 1 or axes[0..1].count('Y') > 1 or
-        axes[0..1].count('Z') > 1 or axes[1..2].count('X') > 1 or
-        axes[1..2].count('Y') > 1 or axes[1..2].count('Z') > 1
+    if axes.include?('XX') or axes.include?('YY') or
+        axes.include?('ZZ')
       raise(ArgumentError, "Cannot rotate about the same axis twice in " +
             "succession")
     end
@@ -285,7 +284,7 @@ class UnitQuaternion < Quaternion
         sign = Math.cos(theta2) <=> 0
         theta1 = Math.atan2(y, sign * x)
       else
-        sign = sin(theta2) <=> 0
+        sign = Math.sin(theta2) <=> 0
         theta1 = Math.atan2(sign * rot_mat[0,1], sign * rot_mat[0,2])
         theta3 = Math.atan2(sign * rot_mat[1,0], -sign * rot_mat[2,0])
       end
