@@ -149,7 +149,7 @@ class TestUnitQuaternion < Test::Unit::TestCase
       a, ax = q.getAngleAxis()
       q2 = ::UnitQuaternion.fromAngleAxis(a, ax)
       assert(areEqualMatrices(q.getRotationMatrix(), q2.getRotationMatrix(),
-                              1e-7))
+                              1e-14))
     end
   end
 
