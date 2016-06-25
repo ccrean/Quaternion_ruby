@@ -280,11 +280,18 @@ class TestUnitQuaternion < Test::Unit::TestCase
     assert_in_delta((q - UnitQuaternion.new(-1,0,0,0)).norm(), 0, 1e-15)
 
     assert_raise(ArgumentError) { q.getEuler('xy') }
+    assert_raise(ArgumentError) { q.getEuler('xyzx') }
     assert_raise(ArgumentError) { q.getEuler('xYz') }
     assert_raise(ArgumentError) { q.getEuler('xxy') }
     assert_raise(ArgumentError) { q.getEuler('yyz') }
     assert_raise(ArgumentError) { q.getEuler('xzz') }
     assert_raise(ArgumentError) { q.getEuler('xzb') }
+
+    assert_raise(ArgumentError) { UnitQuaternion.fromEuler(0, 0, 0, 'xy') }
+    assert_raise(ArgumentError) { UnitQuaternion.fromEuler(1, 1, 1, 'x') }
+    assert_raise(ArgumentError) { UnitQuaternion.fromEuler(0, 0, 0, 'xyzx') }
+    assert_raise(ArgumentError) { UnitQuaternion.fromEuler(0, 0, 0, 'xya') }
+    assert_raise(ArgumentError) { UnitQuaternion.fromEuler(0, 0, 0, 'Xyz') }
   end
 
   def test_rotationMatrix
@@ -300,6 +307,26 @@ class TestUnitQuaternion < Test::Unit::TestCase
                               q_from.getRotationMatrix(), tol))
       assert(areEqualMatrices(q.getRotationMatrix(),
                               q_set.getRotationMatrix(), tol))
+    end
+
+    assert_raise(ArgumentError) do
+      UnitQuaternion.fromRotationMatrix(Matrix[ [1, 1, 0],
+                                                [0, 1, 0],
+                                                [0, 0, 1] ])
+    end
+    assert_raise(ArgumentError) do
+      UnitQuaternion.fromRotationMatrix(Matrix[ [1, 1e-8, 0],
+                                                [0, 1, 0],
+                                                [0, 0, 1] ])
+    end
+    assert_raise(ArgumentError) do
+      UnitQuaternion.fromRotationMatrix(Matrix[ [0, 1, 0],
+                                                [0, 1, 0],
+                                                [0, 0, 1] ])
+    end
+    assert_raise(ArgumentError) do
+      UnitQuaternion.fromRotationMatrix(Matrix[ [1, 0, 0],
+                                                [0, 1, 0] ])
     end
   end
 end
