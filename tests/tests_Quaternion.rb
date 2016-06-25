@@ -117,4 +117,22 @@ class TestQuaternion < Test::Unit::TestCase
     assert(Quaternion.new(1,2,3,4) != Quaternion.new(4,3,2,1))
     assert(Quaternion.new(0,0,0,0) != Quaternion.new(1,1,1,1))
   end
+
+  def test_scalarMult
+    q = ::Quaternion.new(1,1,1,1)
+    # assert_equal(3 * q, Quaternion.new(3,3,3,3))
+    # assert_equal(1.111 * q, Quaternion.new(1.111, 1.111, 1.111, 1.111))
+    assert_equal(q * 3, Quaternion.new(3,3,3,3))
+    assert_equal(q * 1.111, Quaternion.new(1.111, 1.111, 1.111, 1.111))
+  end
+
+  def test_string
+    q = Quaternion.new(1,1,1,1)
+    assert_equal(q.to_s,
+                 "(1, Vector[1, 1, 1])")
+
+    q = Quaternion.new(1,2,3,4)
+    assert_equal(q.to_s,
+                 "(1, Vector[2, 3, 4])")
+  end
 end
