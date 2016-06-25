@@ -120,8 +120,8 @@ class TestQuaternion < Test::Unit::TestCase
 
   def test_scalarMult
     q = ::Quaternion.new(1,1,1,1)
-    # assert_equal(3 * q, Quaternion.new(3,3,3,3))
-    # assert_equal(1.111 * q, Quaternion.new(1.111, 1.111, 1.111, 1.111))
+    assert_equal(3 * q, Quaternion.new(3,3,3,3))
+    assert_equal(1.111 * q, Quaternion.new(1.111, 1.111, 1.111, 1.111))
     assert_equal(q * 3, Quaternion.new(3,3,3,3))
     assert_equal(q * 1.111, Quaternion.new(1.111, 1.111, 1.111, 1.111))
   end

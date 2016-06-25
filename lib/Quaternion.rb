@@ -87,6 +87,10 @@ class Quaternion
     return "(" + @beta0.to_s + ", " + @beta_s.to_s + ")"
   end
 
+  def coerce(other)
+    return self, other
+  end
+
   private
   def cross_product(v1, v2)
     # returns the cross product of vectors v1 and v2
