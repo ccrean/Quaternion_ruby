@@ -44,11 +44,14 @@ class TestUnitQuaternion < Test::Unit::TestCase
     # end
     @axes = [ Vector[ 1, 1, 1 ], Vector[ 1, 0, 0 ], Vector[ 0, 1, 0 ],
               Vector[ 0, 0, 1 ], Vector[ 1, 2, 3 ], ]
-    @euler = []
-    ['x', 'y', 'z'].permutation() do |s|
-      @euler << s.join("")
-      @euler << s.join("").upcase()
-    end
+    # @euler = []
+    # ['x', 'y', 'z'].permutation() do |s|
+    #   @euler << s.join("")
+    #   @euler << s.join("").upcase()
+    # end
+    @euler = ['XYZ', 'XZY', 'XYX', 'XZX', 'YXZ', 'YZX', 'YXY', 'YZY',
+              'ZXY', 'ZYX', 'ZXZ', 'ZYZ', 'xyz', 'xzy', 'xyx', 'xzx',
+              'yxz', 'yzx', 'yxy', 'yzy', 'zxy', 'zyx', 'zxz', 'zyz']
   end
 
   def test_initialize
