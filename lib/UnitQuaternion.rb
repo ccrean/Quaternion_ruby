@@ -197,15 +197,15 @@ class UnitQuaternion < Quaternion
 
   def getRotationMatrix
     # returns the rotation matrix corresponding to this quaternion
-    return Matrix[ [ 1 - 2*@beta_s[1]**2 - 2*@beta_s[2]**2,
+    return Matrix[ [ @beta0**2 + @beta_s[0]**2 - @beta_s[1]**2 - @beta_s[2]**2,
                      2*(@beta_s[0]*@beta_s[1] - @beta0*@beta_s[2]),
                      2*(@beta_s[0]*@beta_s[2] + @beta0*@beta_s[1]) ],
                    [ 2*(@beta_s[0]*@beta_s[1] + @beta0*@beta_s[2]),
-                     1 - 2*@beta_s[0]**2 - 2*@beta_s[2]**2,
+                     @beta0**2 - @beta_s[0]**2 + @beta_s[1]**2 - @beta_s[2]**2,
                      2*(@beta_s[1]*@beta_s[2] - @beta0*@beta_s[0]) ],
                    [ 2*(@beta_s[0]*@beta_s[2] - @beta0*@beta_s[1]),
                      2*(@beta0*@beta_s[0] + @beta_s[1]*@beta_s[2]),
-                     1 - 2*@beta_s[0]**2 - 2*@beta_s[1]**2 ] ]
+                     @beta0**2 - @beta_s[0]**2 - @beta_s[1]**2 + @beta_s[2]**2 ] ]
   end
 
   def transform(vec)
