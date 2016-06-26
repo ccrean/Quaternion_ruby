@@ -189,7 +189,7 @@ class UnitQuaternion < Quaternion
     if mat.row_size() != 3 or mat.column_size() != 3
       raise(ArgumentError, "Rotation matrix must be 3x3")
     end
-    tol = 1e-10
+    tol = 1e-15
     if not isOrthonormalMatrix(mat, tol)
       raise(ArgumentError, "Matrix is not orthonormal (to within " +
             tol.to_s(), ")")
