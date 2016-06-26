@@ -282,12 +282,12 @@ class UnitQuaternion < Quaternion
         y = rot_mat[2,1]
         x = rot_mat[1,1]
         # print("x = ", x, ", y = ", y, "\n")
-        if y.abs() < 1e-15
-          y = 0
-        end
-        if x.abs() < 1e-15
-          x = 0
-        end
+        # if y.abs() < 1e-15
+        #   y = 0
+        # end
+        # if x.abs() < 1e-15
+        #   x = 0
+        # end
         sign = Math.cos(theta2) <=> 0
         # print("x = ", x, ", y = ", y, "\n")
         # print("sign = ", sign, "\n")
