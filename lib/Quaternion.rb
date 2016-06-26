@@ -54,6 +54,11 @@ class Quaternion
     return Quaternion.new(@beta0 - beta0, *(@beta_s - beta_s))
   end
 
+  def -@
+    # returns the additive inverse of the quaternion
+    Quaternion.new(-@beta0, -@beta_s[0], -@beta_s[1], -@beta_s[2])
+  end
+
   def /(s)
     # divides a quaternion by a scalar
     return Quaternion.new(@beta0 / s, *(@beta_s / s))
