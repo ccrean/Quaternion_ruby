@@ -10,6 +10,10 @@ class TestQuaternion < Test::Unit::TestCase
                ::Quaternion.new(1234.4134, 689.6124, 134.124, 0.5),
                ::Quaternion.new(1,1,1,1),
              ]
+    nums = (0..1).step(0.2).to_a + (2..10).step(2).to_a
+    nums.product(nums, nums, nums).each() do |w, x, y, z|
+      @quats << Quaternion.new(w, x, y, z)
+    end
   end
 
   def test_initialize
@@ -53,7 +57,7 @@ class TestQuaternion < Test::Unit::TestCase
     assert_equal(0, ::Quaternion.new(0,0,0,0).norm())
 
     for q in @quats
-      assert_in_delta(q.norm(), Math.sqrt((q*q.conjugate()).get[0]), 1e-15)
+      assert_in_delta(q.norm(), Math.sqrt((q*q.conjugate()).get[0]), 1e-14)
     end
   end
 
@@ -71,10 +75,14 @@ class TestQuaternion < Test::Unit::TestCase
   end
 
   def test_inverse
+    @quats.delete(Quaternion.new(0,0,0,0))
     for q in @quats
       q_inv = q.inverse()
       q_result = q * q_inv
       beta0, beta_s = q_result.get()
+      if beta0.nan?
+        puts q
+      end
       assert_in_delta(1, beta0, 1e-15)
       assert_in_delta(beta_s.norm(), 0, 1e-15)
     end
@@ -104,6 +112,7 @@ class TestQuaternion < Test::Unit::TestCase
     assert_in_delta(0.5, beta0, 1e-15)
     assert_in_delta((Vector[0.5,0.5,0.5] - beta_s).norm(), 0, 1e-15)
 
+    @quats.delete(Quaternion.new(0,0,0,0))
     for q in @quats
       assert_in_delta(q.normalized().norm(), 1, 1e-15)
     end
@@ -134,5 +143,12 @@ class TestQuaternion < Test::Unit::TestCase
     q = Quaternion.new(1,2,3,4)
     assert_equal(q.to_s,
                  "(1, Vector[2, 3, 4])")
+  end
+
+  def test_unaryMinus
+    for q in @quats
+      beta0, beta_s = q.get()
+      assert_equal(-q, Quaternion.new(-beta0, -beta_s[0], -beta_s[1], -beta_s[2]))
+    end
   end
 end
