@@ -15,7 +15,6 @@ The Quaternion and UnitQuaternion classes must be included separately
 in your program, using the following lines:
 
 require 'Quaternion'
-
 require 'UnitQuaternion'
 
 Note that requiring UnitQuaternion will automatically give you access
