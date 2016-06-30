@@ -5,20 +5,17 @@ class that is designed to be used to represent rotations.
 
 ## Installation
 
-This package is not available through any gem repository (yet).  Install it using:
+This package is not available through any gem repository (yet).
+Install it using:
 
 $ sudo rake install
 
 ## Usage
 
-The Quaternion and UnitQuaternion classes must be included separately
-in your program, using the following lines:
+To use the Quaternion and UnitQuaternion classes in your program,
+include the following line:
 
 require 'Quaternion'
-require 'UnitQuaternion'
-
-Note that requiring UnitQuaternion will automatically give you access
-to the Quaternion class as well, but not the other way around.
 
 ## Contributing
 
