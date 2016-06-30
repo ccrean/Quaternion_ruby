@@ -1,3 +1,9 @@
+# Name: tests_UnitQuaternion.rb
+# Description: Test cases for the UnitQuaternion class.
+# Author: Cory Crean
+# E-mail: cory.crean@gmail.com
+# Copyright (c) 2016, Cory Crean
+
 require 'test/unit'
 require 'matrix'
 require_relative '../lib/UnitQuaternion'

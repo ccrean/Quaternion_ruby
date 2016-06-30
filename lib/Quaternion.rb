@@ -1,3 +1,11 @@
+# Name: Quaternion.rb
+# Description: A basic quaternion class, which implements standard
+#              operations such as addition, subtraction,
+#              multiplication, scalar division, inversion, conjugation, etc.
+# Author: Cory Crean
+# E-mail: cory.crean@gmail.com
+# Copyright (c) 2016, Cory Crean
+
 require 'matrix'
 
 class Quaternion

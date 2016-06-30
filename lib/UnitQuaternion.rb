@@ -1,3 +1,12 @@
+# Name: UnitQuaternion.rb
+# Description: A unit quaternion class, designed to represent spatial
+#              rotations.  Can convert between common representations
+#              of spatial rotations, such as angle-axis, Euler angles,
+#              and rotation matrices.
+# Author: Cory Crean
+# E-mail: cory.crean@gmail.com
+# Copyright (c) 2016, Cory Crean
+
 require 'matrix'
 require_relative 'Quaternion'
 
