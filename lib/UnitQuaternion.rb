@@ -256,7 +256,7 @@ class UnitQuaternion < Quaternion
     # Y, and Z axes (in that order).  If same = true, this method
     # returns the Euler angles about the global X, Y, and X axes (in
     # that order).
-    tol = 1e-7
+    tol = 1e-15
     if same
       # print("rot_mat = ", rot_mat, "\n")
       begin
@@ -272,7 +272,7 @@ class UnitQuaternion < Quaternion
         end
       end
       # print("theta2 = ", theta2, "\n")
-      if Math.sin(theta2).abs() < tol
+      if Math.sin(theta2).abs() < Math.sqrt(tol)
         # if sin(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
         # theta3 + theta1, not the individual angles.  Here, we choose
@@ -315,7 +315,7 @@ class UnitQuaternion < Quaternion
       # print("rh = ", rh, "\n")
       # print("static = ", static, "\n")
       # print("axes = ", axes, "\n")
-      if Math.cos(theta2).abs() < tol
+      if Math.cos(theta2).abs() < Math.sqrt(tol)
         # if cos(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
         # theta3 + theta1.  Here, we choose theta3 = 0 and solve for
