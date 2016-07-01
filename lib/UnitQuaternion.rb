@@ -1,17 +1,19 @@
-# Name: UnitQuaternion.rb
-# Description: A unit quaternion class, designed to represent spatial
-#              rotations.  Can convert between common representations
-#              of spatial rotations, such as angle-axis, Euler angles,
-#              and rotation matrices.
-# Author: Cory Crean
-# E-mail: cory.crean@gmail.com
-# Copyright (c) 2016, Cory Crean
+# Author:: Cory Crean (mailto:cory.crean@gmail.com)
+# Copyright:: Copyright (c) 2016 Cory Crean
+# License:: BSD
+#
+# A unit quaternion class, designed to represent spatial rotations.
+# Can convert between common representations of spatial rotations,
+# such as angle-axis, Euler angles, and rotation matrices.
 
 require 'matrix'
 require_relative 'Quaternion'
 
 class UnitQuaternion < Quaternion
 
+  # Creates a new UnitQuaternion from 4 values.  If the resulting
+  # quaternion does not have magnitude 1, it will be normalized.  If
+  # no arguments are provided, creates the quaternion (1, 0, 0, 0).
   def initialize(*args)
     if args.length() == 4
       set(*args)
@@ -22,6 +24,13 @@ class UnitQuaternion < Quaternion
     end
   end
 
+  # Initializes a quaternion from the angle-axis representation of a
+  # rotation.  The sense of the rotation is determined according to
+  # the right-hand rule.
+  # 
+  # Params:
+  # +angle+:: A scalar representing the angle of the rotation (in radians)
+  # +axis+:: A vector representing the axis of rotation (need not be a unit vector)
   def self.fromAngleAxis(angle, axis)
     # intializes a quaternion from the angle-axis representation of a
     # rotation
@@ -30,24 +39,50 @@ class UnitQuaternion < Quaternion
     return q
   end
 
+  # Initializes a quaternion from a set of 3 Euler angles.
+  # 
+  # Params:
+  # +theta1+:: The angle of rotation about the first axis
+  # +theta2+:: The angle of rotation about the second axis
+  # +theta3+:: The angle of rotation about the third axis
+  # +axes+:: A string of 3 letters ('X/x', 'Y/y', or 'Z/z') representing the three axes of rotation.  Must be all uppercase or all lowercase.  If the string is uppercase, the rotations are performed about the inertial axes.  If the string is lowercase, the rotations are performed about the body-fixed axes.  Repeated axes are allowed, but not in succession (for example, 'xyx' is fine, but 'xxy' is not allowed).
   def self.fromEuler(theta1, theta2, theta3, axes)
     q = UnitQuaternion.new()
     q.setEuler(theta1, theta2, theta3, axes)
     return q
   end
 
+  # Initializes a quaternion from a rotation matrix
+  # 
+  # Params:
+  # +mat+:: A 3x3 orthonormal matrix.
   def self.fromRotationMatrix(mat)
     q = UnitQuaternion.new()
     q.setRotationMatrix(mat)
     return q
   end
 
+  # Set the quaternion's values.  If the 4 arguments do not form an
+  # unit quaternion, the resulting quaternion is normalized.
+  # 
+  # Params:
+  # +w+:: the real part of the quaterion
+  # +x+:: the i-component
+  # +y+:: the j-component
+  # +z+:: the k-component
   def set(w, x, y, z)
     # sets the values of the quaternion
     super(w, x, y, z)
     @beta0, @beta_s = normalized().get()
   end
 
+  # Sets the values of the quaternion from the angle-axis
+  # representation of a rotation.  The sense of the rotation is
+  # determined according to the right-hand rule.
+  # 
+  # Params:
+  # +angle+:: A scalar representing the angle of the rotation (in radians)
+  # +axis+:: A vector representing the axis of rotation (need not be a unit vector)
   def setAngleAxis(angle, axis)
     # sets the quaternion based on the angle-axis representation of a
     # rotation
@@ -65,6 +100,12 @@ class UnitQuaternion < Quaternion
     @beta_s = Vector[beta1, beta2, beta3]
   end
 
+  # Returns the angle-axis representation of the rotation represented
+  # by the quaternion.
+  # 
+  # Returns:
+  # +angle+:: A scalar representing the angle of rotation (in radians)
+  # +axis+:: A unit vector representing the axis of rotation
   def getAngleAxis
     # return the angle-axis representation of the rotation contained in
     # this quaternion
@@ -81,6 +122,13 @@ class UnitQuaternion < Quaternion
     return angle, axis
   end
 
+  # Sets the values of the quaternion from a set of 3 Euler angles.
+  # 
+  # Params:
+  # +theta1+:: The angle of rotation about the first axis
+  # +theta2+:: The angle of rotation about the second axis
+  # +theta3+:: The angle of rotation about the third axis
+  # +axes+:: A string of 3 letters ('X/x', 'Y/y', or 'Z/z') representing the three axes of rotation.  Must be all uppercase or all lowercase.  If the string is uppercase, the rotations are performed about the inertial axes.  If the string is lowercase, the rotations are performed about the body-fixed axes.  Repeated axes are allowed, but not in succession (for example, 'xyx' is fine, but 'xxy' is not allowed).
   def setEuler(theta1, theta2, theta3, axes)
     if axes.length() != 3
       raise(ArgumentError, "Must specify exactly 3 axes")
@@ -108,6 +156,15 @@ class UnitQuaternion < Quaternion
     end
   end
 
+  # Returns the Euler angles corresponding to this quaternion.
+  # 
+  # Params:
+  # +axes+:: A string of 3 letters ('X/x', 'Y/y', or 'Z/z') representing the three axes of rotation.  Must be all uppercase or all lowercase.  If the string is uppercase, the rotations are performed about the inertial axes.  If the string is lowercase, the rotations are performed about the body-fixed axes.  Repeated axes are allowed, but not in succession (for example, 'xyx' is fine, but 'xxy' is not allowed).
+  # 
+  # Returns:
+  # +theta1+:: The angle of rotation about the first axis
+  # +theta2+:: The angle of rotation about the second axis
+  # +theta3+:: The angle of rotation about the third axis
   def getEuler(axes)
     # Returns the Euler angles about the specified axes.  The axes should
     # be specified as a string, and can be any permutation (with
@@ -187,6 +244,10 @@ class UnitQuaternion < Quaternion
     return theta1, theta2, theta3
   end
 
+  # Sets the values of the quaternion from a rotation matrix
+  # 
+  # Params:
+  # +mat+:: A 3x3 orthonormal matrix.
   def setRotationMatrix(mat)
     if mat.row_size() != 3 or mat.column_size() != 3
       raise(ArgumentError, "Rotation matrix must be 3x3")
@@ -200,6 +261,7 @@ class UnitQuaternion < Quaternion
     setEuler(theta1, theta2, theta3, 'XYZ')
   end
 
+  # Returns the rotation matrix corresponding to this quaternion.
   def getRotationMatrix
     # returns the rotation matrix corresponding to this quaternion
     return Matrix[ [ @beta0**2 + @beta_s[0]**2 - @beta_s[1]**2 - @beta_s[2]**2,
@@ -213,14 +275,17 @@ class UnitQuaternion < Quaternion
                      @beta0**2 - @beta_s[0]**2 - @beta_s[1]**2 + @beta_s[2]**2 ] ]
   end
 
+  # Transforms a vector by applying to it the rotation represented by
+  # this quaternion, and returns the result.
+  # 
+  # Params:
+  # +vec+:: A 3-D vector in the unrotated frame.
   def transform(vec)
-    # transforms vec by applying the rotation represented by this
-    # quaternion, and returns the result
     return getRotationMatrix() * vec
   end
 
+  # Returns the inverse of the quaternion
   def inverse
-    # returns the inverse of the quaternion
     result = UnitQuaternion.new
     result.set(@beta0, *(-1*@beta_s))
     return result

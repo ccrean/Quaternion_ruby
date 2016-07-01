@@ -1,15 +1,17 @@
-# Name: Quaternion.rb
-# Description: A basic quaternion class, which implements standard
-#              operations such as addition, subtraction,
-#              multiplication, scalar division, inversion, conjugation, etc.
-# Author: Cory Crean
-# E-mail: cory.crean@gmail.com
-# Copyright (c) 2016, Cory Crean
+# Author:: Cory Crean (mailto:cory.crean@gmail.com)
+# Copyright:: Copyright (c) 2016 Cory Crean
+# License:: BSD
+#
+# A basic quaternion class, which implements standard operations such
+# as addition, subtraction, multiplication, scalar division,
+# inversion, conjugation, etc.
 
 require 'matrix'
 
 class Quaternion
 
+  # Create new quaternion from 4 values.  If no arguments are
+  # provided, creates the zero quaternion.
   def initialize(*args)
     if args.length() == 4
       set(*args)
@@ -20,60 +22,69 @@ class Quaternion
     end
   end
 
+  # Set the quaternion's values.
+  # 
+  # Params:
+  # +w+:: the real part of the quaterion
+  # +x+:: the i-component
+  # +y+:: the j-component
+  # +z+:: the k-component
   def set(w, x, y, z)
     @beta0 = w
     @beta_s = Vector[x,y,z]
   end
 
+  # Returns the quaternion's values as a scalar and a vector.
   def get
-    # returns the values in the quaternion
     return @beta0, @beta_s
   end
 
+  # Returns the magnitude of the quaternion
   def norm
-    # returns the magnitude of the quaternion
     return Math.sqrt(@beta0**2 + @beta_s.norm()**2)
   end
 
+  # Returns the conjugate of the quaternion
   def conjugate
-    # returns the conjugate of the quaternion
     return Quaternion.new(@beta0, *(-1*@beta_s))
   end
 
+  # Returns the multiplicative inverse of the quaterion
   def inverse
-    # returns the multiplicative inverse of the quaterion
     return self.conjugate() / self.norm() ** 2
   end
 
+  # Returns a normalized quaternion.  q.normalized() is equivalent to
+  # q/q.norm()
   def normalized
-    # returns a normalized quaternion
     return self / norm()
   end
 
+  # Returns the sum of two quaternions
   def +(q)
-    # adds two quaternions
     beta0, beta_s = q.get()
     return Quaternion.new(@beta0 + beta0, *(@beta_s + beta_s))
   end
 
+  # Returns the difference of two quaternions
   def -(q)
-    # subtracts two quaternions
     beta0, beta_s = q.get()
     return Quaternion.new(@beta0 - beta0, *(@beta_s - beta_s))
   end
 
+  # Returns the additive inverse of the quaternion
   def -@
-    # returns the additive inverse of the quaternion
     Quaternion.new(-@beta0, -@beta_s[0], -@beta_s[1], -@beta_s[2])
   end
 
+  # Returns the result of dividing the quaternion by a scalar
   def /(s)
-    # divides a quaternion by a scalar
     return Quaternion.new(@beta0 / s, *(@beta_s / s))
   end
 
+  # Returns the result of multiplying the quaternion by a scalar or
+  # another quaternion
   def *(q)
-    # multiplies q by a scalar or another quaternion
     if q.is_a?(Numeric)
       return Quaternion.new(@beta0 * q, *(@beta_s * q))
     elsif q.is_a?(Quaternion)
@@ -86,8 +97,9 @@ class Quaternion
     end
   end
 
+  # Returns true if two quaternions are equal (meaning that their
+  # corresponding entries are equal to each other) and false otherwise
   def ==(q)
-    # checks whether or not two quaternions are equal
     if get() == q.get()
       return true
     else
@@ -95,8 +107,8 @@ class Quaternion
     end
   end
 
+  # Returns the string representation of the quaternion
   def to_s
-    # converts the quaternion to a string
     return "(" + @beta0.to_s + ", " + @beta_s.to_s + ")"
   end
 
