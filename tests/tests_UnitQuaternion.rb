@@ -11,7 +11,6 @@ require_relative '../lib/UnitQuaternion'
 def areEqualMatrices(m1, m2, tol)
   m1.zip(m2).each() do |v1, v2|
     if (v1 - v2).abs() > tol
-      print("Error = ", (v1 - v2).abs(), "\n")
       return false
     end
   end
@@ -266,16 +265,6 @@ class TestUnitQuaternion < Test::Unit::TestCase
       @euler.each do |e|
         q2 = UnitQuaternion.fromEuler(*q.getEuler(e), e)
         tol = 1e-7
-        if not areEqualMatrices(q.getRotationMatrix(),
-                                q2.getRotationMatrix(),
-                                tol)
-          puts q
-          puts q2
-          puts q.getRotationMatrix()
-          puts q2.getRotationMatrix()
-          puts theta1, theta2, theta3, e
-          puts q.getEuler(e)
-        end
         assert(areEqualMatrices(q.getRotationMatrix(),
                                 q2.getRotationMatrix(), tol))
       end

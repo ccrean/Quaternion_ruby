@@ -173,16 +173,9 @@ class UnitQuaternion < Quaternion
     
     p_mat = Matrix.rows(p_mat_rows)
     rot_mat = p_mat * getRotationMatrix() * p_mat.transpose()
-    # puts "R = ", getRotationMatrix()
-    # puts "P = ", p_mat
-    # puts "R' = ", rot_mat
-    # print("rh = ", rh, "\n")
 
     theta1, theta2, theta3 = parseMatrix(rot_mat, same)
 
-    # print("theta1 = ", theta1, "\ntheta2 = ", theta2, "\ntheta3 = ",
-    #       theta3, "\n")
-      
     if not static
       theta1, theta3 = theta3, theta1
     end
@@ -273,33 +266,21 @@ class UnitQuaternion < Quaternion
       rescue Math::DomainError
         # the value of rot_mat[0,0] may be off slightly due to truncation
         # error
-        # puts("rot_mat[0,0] = " + rot_mat[0,0].to_s + ".  Rounding.")
         if rot_mat[0,0] > 0
           theta2 = 0
         else
           theta2 = Math::PI
         end
       end
-      # print("theta2 = ", theta2, "\n")
       if Math.sin(theta2).abs() < Math.sqrt(tol)
         # if sin(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
         # theta3 + theta1, not the individual angles.  Here, we choose
         # theta3 = 0 and solve for theta1.
-        # print("sin(theta2) too small.\n")
         theta3 = 0
         y = rot_mat[2,1]
         x = rot_mat[1,1]
-        # print("x = ", x, ", y = ", y, "\n")
-        # if y.abs() < 1e-15
-        #   y = 0
-        # end
-        # if x.abs() < 1e-15
-        #   x = 0
-        # end
         sign = Math.cos(theta2) <=> 0
-        # print("x = ", x, ", y = ", y, "\n")
-        # print("sign = ", sign, "\n")
         theta1 = Math.atan2(sign * y, x)
       else
         sign = Math.sin(theta2) <=> 0
@@ -312,18 +293,12 @@ class UnitQuaternion < Quaternion
       rescue Math::DomainError
         # the value of rot_mat[2,0] may be off slightly due to truncation
         # error
-        # puts("rot_mat[2,0] = " + rot_mat[2,0].to_s + ".  Rounding.")
         if -rot_mat[2,0] > 0
           theta2 = Math::PI/2
         else
           theta2 = -Math::PI/2
         end
       end
-      # print("theta2 = ", theta2, "\n")
-      # print("cos(theta2) = ", Math.cos(theta2), "\n")
-      # print("rh = ", rh, "\n")
-      # print("static = ", static, "\n")
-      # print("axes = ", axes, "\n")
       if Math.cos(theta2).abs() < Math.sqrt(tol)
         # if cos(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
@@ -331,24 +306,11 @@ class UnitQuaternion < Quaternion
         # theta1.
         y = -rot_mat[1,2]
         x = rot_mat[0,2]
-        # if y.abs() < 1e-15
-        #   y = 0
-        # end
-        # if x.abs() < 1e-15
-        #   x = 0
-        # end
         sign = Math.sin(theta2) <=> 0
-        # print("x = ", sign * x, ", y = ", y, "\n")
-        # print("x_alt = ", rot_mat[1,1], ", y_alt = ", rot_mat[0,1] * sign,
-        #       "\n")
         theta1 = Math.atan2(y, sign * x)
         theta3 = 0
       else
         sign = Math.cos(theta2) <=> 0
-        # print("rot_mat[2,1] = ", rot_mat[2,1], ", rot_mat[2,2] = ",
-        #       rot_mat[2,2], ", sign = ", sign, "\n")
-        # print("rot_mat[1,0] = ", rot_mat[1,0], ", rot_mat[0,0] = ",
-        #       rot_mat[0,0], ", sign = ", sign, "\n")
         theta1 = Math.atan2(sign * rot_mat[2,1], sign * rot_mat[2,2])
         theta3 = Math.atan2(sign * rot_mat[1,0], sign * rot_mat[0,0])
       end

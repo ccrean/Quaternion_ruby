@@ -86,9 +86,6 @@ class TestQuaternion < Test::Unit::TestCase
       q_inv = q.inverse()
       q_result = q * q_inv
       beta0, beta_s = q_result.get()
-      if beta0.nan?
-        puts q
-      end
       assert_in_delta(1, beta0, 1e-15)
       assert_in_delta(beta_s.norm(), 0, 1e-15)
     end
