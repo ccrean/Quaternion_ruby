@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'Quaternion/version'
+require 'unit_quaternion/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "Quaternion"
-  spec.version       = Quaternion::VERSION
+  spec.name          = "unit_quaternion"
+  spec.version       = unit_quaternion::VERSION
   spec.authors       = ["Cory Crean"]
   spec.email         = ["cory.crean@gmail.com"]
   spec.description   = %q{Provides a general Quaternion class, and UnitQuaternion class to represent rotations}
