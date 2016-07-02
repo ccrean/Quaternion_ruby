@@ -5,8 +5,11 @@ class that is designed to be used to represent rotations.
 
 ## Installation
 
-This package is not available through any gem repository (yet).
-Install it using:
+You can install this gem in either of the following ways:
+
+$ sudo gem install unit_quaternion
+
+or
 
 $ sudo rake install
 
