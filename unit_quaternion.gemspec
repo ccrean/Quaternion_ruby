@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["cory.crean@gmail.com"]
   spec.description   = %q{Provides a general Quaternion class, and UnitQuaternion class to represent rotations}
   spec.summary       = spec.description
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/ccrean/Quaternion_ruby"
   spec.license       = "BSD"
 
   spec.files         = `git ls-files`.split($/)
