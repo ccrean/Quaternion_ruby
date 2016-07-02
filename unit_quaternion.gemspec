@@ -5,7 +5,7 @@ require 'unit_quaternion/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "unit_quaternion"
-  spec.version       = unit_quaternion::VERSION
+  spec.version       = Quaternion::VERSION
   spec.authors       = ["Cory Crean"]
   spec.email         = ["cory.crean@gmail.com"]
   spec.description   = %q{Provides a general Quaternion class, and UnitQuaternion class to represent rotations}

@@ -7,7 +7,7 @@
 # such as angle-axis, Euler angles, and rotation matrices.
 
 require 'matrix'
-require_relative 'Quaternion'
+require_relative 'quaternion'
 
 class UnitQuaternion < Quaternion
 

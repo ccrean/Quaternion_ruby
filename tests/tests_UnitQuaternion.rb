@@ -6,7 +6,7 @@
 
 require 'test/unit'
 require 'matrix'
-require_relative '../lib/UnitQuaternion'
+require_relative '../lib/unit_quaternion'
 
 def areEqualMatrices(m1, m2, tol)
   m1.zip(m2).each() do |v1, v2|

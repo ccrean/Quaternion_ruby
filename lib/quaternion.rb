@@ -125,5 +125,3 @@ class Quaternion
   end
 
 end
-
-require_relative 'UnitQuaternion'
