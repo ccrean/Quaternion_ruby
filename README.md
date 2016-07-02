@@ -15,7 +15,7 @@ $ sudo rake install
 To use the Quaternion and UnitQuaternion classes in your program,
 include the following line:
 
-require 'Quaternion'
+require 'unit_quaternion'
 
 You can perform basic quaternion operations, such as addition and multiplication:
 
