@@ -39,51 +39,51 @@ class Quaternion
     return @beta0, @beta_s
   end
 
-  # Returns the magnitude of the quaternion
+  # Returns the magnitude of the quaternion.
   def norm
     return Math.sqrt(@beta0**2 + @beta_s.norm()**2)
   end
 
-  # Returns the conjugate of the quaternion
+  # Returns the conjugate of the quaternion.
   def conjugate
     return Quaternion.new(@beta0, *(-1*@beta_s))
   end
 
-  # Returns the multiplicative inverse of the quaterion
+  # Returns the multiplicative inverse of the quaterion.
   def inverse
     return self.conjugate() / self.norm() ** 2
   end
 
   # Returns a normalized quaternion.  q.normalized() is equivalent to
-  # q/q.norm()
+  # q/q.norm().
   def normalized
     return self / norm()
   end
 
-  # Returns the sum of two quaternions
+  # Returns the sum of two quaternions.
   def +(q)
     beta0, beta_s = q.get()
     return Quaternion.new(@beta0 + beta0, *(@beta_s + beta_s))
   end
 
-  # Returns the difference of two quaternions
+  # Returns the difference of two quaternions.
   def -(q)
     beta0, beta_s = q.get()
     return Quaternion.new(@beta0 - beta0, *(@beta_s - beta_s))
   end
 
-  # Returns the additive inverse of the quaternion
+  # Returns the additive inverse of the quaternion.
   def -@
     Quaternion.new(-@beta0, -@beta_s[0], -@beta_s[1], -@beta_s[2])
   end
 
-  # Returns the result of dividing the quaternion by a scalar
+  # Returns the result of dividing the quaternion by a scalar.
   def /(s)
     return Quaternion.new(@beta0 / s, *(@beta_s / s))
   end
 
   # Returns the result of multiplying the quaternion by a scalar or
-  # another quaternion
+  # another quaternion.
   def *(q)
     if q.is_a?(Numeric)
       return Quaternion.new(@beta0 * q, *(@beta_s * q))
@@ -98,7 +98,7 @@ class Quaternion
   end
 
   # Returns true if two quaternions are equal (meaning that their
-  # corresponding entries are equal to each other) and false otherwise
+  # corresponding entries are equal to each other) and false otherwise.
   def ==(q)
     if get() == q.get()
       return true
@@ -107,7 +107,7 @@ class Quaternion
     end
   end
 
-  # Returns the string representation of the quaternion
+  # Returns the string representation of the quaternion.
   def to_s
     return "(" + @beta0.to_s + ", " + @beta_s.to_s + ")"
   end
@@ -118,7 +118,7 @@ class Quaternion
 
   private
   def cross_product(v1, v2)
-    # returns the cross product of vectors v1 and v2
+    # returns the cross product of vectors v1 and v2.
     return Vector[ v1[1]*v2[2] - v1[2]*v2[1],
                    v1[2]*v2[0] - v1[0]*v2[2],
                    v1[0]*v2[1] - v1[1]*v2[0] ]

@@ -32,8 +32,6 @@ class UnitQuaternion < Quaternion
   # +angle+:: A scalar representing the angle of the rotation (in radians)
   # +axis+:: A vector representing the axis of rotation (need not be a unit vector)
   def self.fromAngleAxis(angle, axis)
-    # intializes a quaternion from the angle-axis representation of a
-    # rotation
     q = UnitQuaternion.new()
     q.setAngleAxis(angle, axis)
     return q
@@ -52,7 +50,7 @@ class UnitQuaternion < Quaternion
     return q
   end
 
-  # Initializes a quaternion from a rotation matrix
+  # Initializes a quaternion from a rotation matrix.
   # 
   # Params:
   # +mat+:: A 3x3 orthonormal matrix.
@@ -71,7 +69,6 @@ class UnitQuaternion < Quaternion
   # +y+:: the j-component
   # +z+:: the k-component
   def set(w, x, y, z)
-    # sets the values of the quaternion
     super(w, x, y, z)
     @beta0, @beta_s = normalized().get()
   end
@@ -84,8 +81,6 @@ class UnitQuaternion < Quaternion
   # +angle+:: A scalar representing the angle of the rotation (in radians)
   # +axis+:: A vector representing the axis of rotation (need not be a unit vector)
   def setAngleAxis(angle, axis)
-    # sets the quaternion based on the angle-axis representation of a
-    # rotation
     if axis == Vector[0,0,0]
       raise(ArgumentError, "Axis must not be the zero vector")
     end
@@ -107,8 +102,6 @@ class UnitQuaternion < Quaternion
   # +angle+:: A scalar representing the angle of rotation (in radians)
   # +axis+:: A unit vector representing the axis of rotation
   def getAngleAxis
-    # return the angle-axis representation of the rotation contained in
-    # this quaternion
     angle = 2*Math.acos(@beta0)
     
     # if sin(theta/2) = 0, then theta = 2*n*PI, where n is any integer,
@@ -166,14 +159,6 @@ class UnitQuaternion < Quaternion
   # +theta2+:: The angle of rotation about the second axis
   # +theta3+:: The angle of rotation about the third axis
   def getEuler(axes)
-    # Returns the Euler angles about the specified axes.  The axes should
-    # be specified as a string, and can be any permutation (with
-    # replacement) of 'X', 'Y', and 'Z', as long as no letter is adjacent
-    # to itself (for example, 'XYX' is valid, but 'XXY' is not).
-    # If the axes are uppercase, this function returns the angles about
-    # the global axes.  If they are lowercase, this function returns the
-    # angles about the body-fixed axes.
-    #
     # This method implements Shoemake's algorithm for finding the Euler
     # angles from a rotation matrix, found in Graphics Gems IV (pg. 222).
 
@@ -244,7 +229,7 @@ class UnitQuaternion < Quaternion
     return theta1, theta2, theta3
   end
 
-  # Sets the values of the quaternion from a rotation matrix
+  # Sets the values of the quaternion from a rotation matrix.
   # 
   # Params:
   # +mat+:: A 3x3 orthonormal matrix.
@@ -263,7 +248,6 @@ class UnitQuaternion < Quaternion
 
   # Returns the rotation matrix corresponding to this quaternion.
   def getRotationMatrix
-    # returns the rotation matrix corresponding to this quaternion
     return Matrix[ [ @beta0**2 + @beta_s[0]**2 - @beta_s[1]**2 - @beta_s[2]**2,
                      2*(@beta_s[0]*@beta_s[1] - @beta0*@beta_s[2]),
                      2*(@beta_s[0]*@beta_s[2] + @beta0*@beta_s[1]) ],
@@ -284,7 +268,7 @@ class UnitQuaternion < Quaternion
     return getRotationMatrix() * vec
   end
 
-  # Returns the inverse of the quaternion
+  # Returns the inverse of the quaternion.
   def inverse
     result = UnitQuaternion.new
     result.set(@beta0, *(-1*@beta_s))
