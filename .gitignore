@@ -4,3 +4,4 @@ other/*
 Gemfile.lock
 pkg/*
 coverage
+doc
