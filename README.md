@@ -7,11 +7,15 @@ class that is designed to be used to represent rotations.
 
 You can install this gem in either of the following ways:
 
+```
 $ sudo gem install unit_quaternion
+```
 
 or
 
+```
 $ sudo rake install
+```
 
 ## Usage
 
