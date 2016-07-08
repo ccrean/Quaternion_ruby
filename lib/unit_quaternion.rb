@@ -280,10 +280,8 @@ class UnitQuaternion < Quaternion
   # will return a UnitQuaternion.  Otherwise, it will return a
   # quaternion.
   def *(q)
-    if q.is_a?(Numeric)
-      if q.abs() == 1
+    if q.is_a?(Numeric) and q.abs() == 1
         return UnitQuaternion.new(@beta0 * q, *(@beta_s * q))
-      end
     elsif q.is_a?(UnitQuaternion)
       beta0, beta_s = quatMult(q)
       return UnitQuaternion.new(beta0, *beta_s)

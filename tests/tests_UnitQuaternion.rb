@@ -213,6 +213,44 @@ class TestUnitQuaternion < Test::Unit::TestCase
                         0, 1e-14)
       end
     end
+
+    q = UnitQuaternion.new(1,2,3,4)
+    result = q * 1
+    assert(result.is_a?(UnitQuaternion))
+    assert_in_delta( (q - result).norm(), 0, 1e-15 )
+
+    result = q * -1
+    assert(result.is_a?(UnitQuaternion))
+
+    result = 1 * q
+    assert(result.is_a?(UnitQuaternion))
+    assert_in_delta( (q - result).norm(), 0, 1e-15 )
+
+    result = -1 * q
+    assert(result.is_a?(UnitQuaternion))
+    
+    q2 = Quaternion.new(1,2,3,4)
+    result = q * q2
+    assert(result.is_a?(Quaternion))
+    assert(!result.is_a?(UnitQuaternion))
+
+    result = q2 * q
+    assert(result.is_a?(Quaternion))
+    assert(!result.is_a?(UnitQuaternion))
+
+    for i in 2..10
+      result = q * i
+      assert(result.is_a?(Quaternion))
+      assert(!result.is_a?(UnitQuaternion))
+      assert_in_delta(i * q.get()[0], result.get()[0], 1e-15)
+      assert_equal((i * q.get()[1] - result.get()[1]).norm(), 0, 1e-15)
+
+      result = i * q
+      assert(result.is_a?(Quaternion))
+      assert(!result.is_a?(UnitQuaternion))
+      assert_in_delta(i * q.get()[0], result.get()[0], 1e-15)
+      assert_equal((i * q.get()[1] - result.get()[1]).norm(), 0, 1e-15)
+    end
   end
 
   def test_transform
