@@ -88,11 +88,8 @@ class Quaternion
     if q.is_a?(Numeric)
       return Quaternion.new(@beta0 * q, *(@beta_s * q))
     elsif q.is_a?(Quaternion)
-      q_beta0, q_beta_s = q.get()
-      beta0 = @beta0 * q_beta0 - @beta_s.inner_product(q_beta_s)
-      beta_s =  @beta0 * q_beta_s + q_beta0 * @beta_s +
-        cross_product(@beta_s, q_beta_s)
-      result = self.class.new(beta0, *beta_s)
+      beta0, beta_s = quatMult(q)
+      result = Quaternion.new(beta0, *beta_s)
       return result
     end
   end
@@ -122,6 +119,16 @@ class Quaternion
     return Vector[ v1[1]*v2[2] - v1[2]*v2[1],
                    v1[2]*v2[0] - v1[0]*v2[2],
                    v1[0]*v2[1] - v1[1]*v2[0] ]
+  end
+
+  # Multiplies with another quaternion, and returns the resulting
+  # beta0 and beta_s values.
+  def quatMult(q)
+    q_beta0, q_beta_s = q.get()
+    beta0 = @beta0 * q_beta0 - @beta_s.inner_product(q_beta_s)
+    beta_s =  @beta0 * q_beta_s + q_beta0 * @beta_s +
+      cross_product(@beta_s, q_beta_s)
+    return beta0, beta_s
   end
 
 end

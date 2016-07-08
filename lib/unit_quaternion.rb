@@ -275,6 +275,23 @@ class UnitQuaternion < Quaternion
     return result
   end
 
+  # Returns the result of multiplying the quaternin by a scalar or
+  # another quaternion.  If the result has magnitude 1, this method
+  # will return a UnitQuaternion.  Otherwise, it will return a
+  # quaternion.
+  def *(q)
+    if q.is_a?(Numeric)
+      if q.abs() == 1
+        return UnitQuaternion.new(@beta0 * q, *(@beta_s * q))
+      end
+    elsif q.is_a?(UnitQuaternion)
+      beta0, beta_s = quatMult(q)
+      return UnitQuaternion.new(beta0, *beta_s)
+    else
+      return super(q)
+    end
+  end
+
   private
   def isRightHanded(axes)
     if axes.length() != 3
