@@ -1,2 +1,3 @@
 Version 0.0.3: Initial release
 Version 0.0.4: Improve documentation
+Version 0.0.5: Fix a bug in UnitQuaternion multiplication, where multiplying a UnitQuaternion by a Quaternion used to return a UnitQuaternion, but now returns a Quaternion
