@@ -242,6 +242,10 @@ class UnitQuaternion < Quaternion
       raise(ArgumentError, "Matrix is not orthonormal (to within " +
             tol.to_s(), ")")
     end
+    if not (mat.determinant() - 1).abs() < 1e-14
+      raise(ArgumentError, "Determinant of the rotation matrix must be " +
+            "equal to 1")
+    end
     theta1, theta2, theta3 = parseMatrix(mat, false)
     setEuler(theta1, theta2, theta3, 'XYZ')
   end

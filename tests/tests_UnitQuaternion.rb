@@ -371,5 +371,16 @@ class TestUnitQuaternion < Test::Unit::TestCase
       UnitQuaternion.fromRotationMatrix(Matrix[ [1, 0],
                                                 [0, 1] ])
     end
+
+    # Make sure that we reject a matrix whose determinant is -1
+    m = -1 * Matrix.I(3)
+    assert_raise(ArgumentError) do
+      UnitQuaternion.fromRotationMatrix(m)
+    end
+
+    q = UnitQuaternion.new()
+    assert_raise(ArgumentError) do
+      q.setRotationMatrix(m)
+    end
   end
 end
