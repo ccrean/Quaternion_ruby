@@ -328,7 +328,6 @@ class UnitQuaternion < Quaternion
     # that order).
     tol = 1e-15
     if same
-      # print("rot_mat = ", rot_mat, "\n")
       begin
         theta2 = Math.acos(rot_mat[0,0])
       rescue Math::DomainError
@@ -340,7 +339,7 @@ class UnitQuaternion < Quaternion
           theta2 = Math::PI
         end
       end
-      if Math.sin(theta2).abs() < Math.sqrt(tol)
+      if (rot_mat[0,0].abs() - 1).abs() < tol
         # if sin(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
         # theta3 + theta1, not the individual angles.  Here, we choose
@@ -367,7 +366,7 @@ class UnitQuaternion < Quaternion
           theta2 = -Math::PI/2
         end
       end
-      if Math.cos(theta2).abs() < Math.sqrt(tol)
+      if (rot_mat[2,0].abs() - 1).abs() < tol
         # if cos(theta2) is 0, then the first and third axes are
         # either parallel or antiparallel, so we can only find the sum
         # theta3 + theta1.  Here, we choose theta3 = 0 and solve for
